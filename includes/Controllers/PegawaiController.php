@@ -25,7 +25,9 @@ class PegawaiController {
     }
 
     public function add_pegawai() {
+       
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+           
             // Ambil data dari form
             $data = [
                 'nama' => sanitize_text_field($_POST['nama']),
@@ -36,10 +38,11 @@ class PegawaiController {
                 'nip' => sanitize_text_field($_POST['nip']),
                 'nrp' => sanitize_text_field($_POST['nrp']),
                 'no_hp' => sanitize_text_field($_POST['no_hp']),
+                'kgb' => sanitize_text_field($_POST['kgb']),
                 'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
                 'status_fungsional' => sanitize_text_field($_POST['status_fungsional'])
             ];
-
+           
             // Lakukan perhitungan atau logika sebelum insert
             $id = $this->pegawai_model->insert($data); // Mengembalikan ID dari pegawai baru
             // $this->kenaikan_gaji_service->calculate($id, $data['nip'], $data['nrp'], $data['status_fungsional']);
@@ -82,6 +85,6 @@ class PegawaiController {
 
     public function display_page() {
         $employees = $this->pegawai_model->get_all();
-        // include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/views/pegawai/view-pegawai-list.php';
+        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/views/pegawai/view-pegawai-list.php';
     }
 }

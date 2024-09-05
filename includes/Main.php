@@ -21,6 +21,7 @@ class Main {
     public function run() {
         $this->admin_menu->initialize();
         $this->public_assets->initialize();
+        $this->activate();
     }
 
     public function activate() {
