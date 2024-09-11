@@ -26,6 +26,15 @@ class Menu {
             'pegawai',
             array($this, 'display_pegawai_page')
         );
+
+        add_submenu_page(
+            'wp-pembinaan',
+            'Notifikasi',
+            'Notifikasi',
+            'manage_options',
+            'Notifikasi',
+            array($this, 'display_notifikasi_page')
+        );
     }
 
     public function display_admin_page() {
@@ -35,5 +44,10 @@ class Menu {
     public function display_pegawai_page() {
         $pegawai_controller = new \WP_Pembinaan\Controllers\PegawaiController();
         $pegawai_controller->display_page();
+    }
+
+    public function display_notifikasi_page(){
+        $controller = new \WP_Pembinaan\Controllers\NotifikasiController();
+        $controller->index();
     }
 }

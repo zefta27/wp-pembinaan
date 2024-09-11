@@ -1,0 +1,87 @@
+<?php
+namespace WP_Pembinaan\Models;
+
+class NotifikasiModel {
+    private $table_name;
+
+    public function __construct() {
+        global $wpdb;
+        $this->table_name = $wpdb->prefix . 'notifikasi';
+    }
+
+    // Membuat tabel notifikasi
+    public function create_table() {
+        global $wpdb;
+    
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $this->table_name;
+    
+        // Cek apakah tabel sudah ada, jika belum maka buat tabel
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            nama VARCHAR(255) NOT NULL,
+            deskripsi TEXT NOT NULL,
+            tipe VARCHAR(50) NOT NULL,
+            tanggal DATE NOT NULL,
+            chain VARCHAR(255) DEFAULT NULL,
+            date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            date_modified DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) $charset_collate;";
+    
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
+    
+
+    // Mendapatkan semua notifikasi
+    public function get_all() {
+        global $wpdb;
+        $query = "SELECT * FROM {$this->table_name}";
+        return $wpdb->get_results($query);
+    }
+
+    public function get_now_to_future() {
+        global $wpdb;
+    
+        // Ambil semua notifikasi yang tanggalnya mulai dari hari ini dan seterusnya
+        $query = $wpdb->prepare(
+            "SELECT * FROM {$this->table_name} WHERE tanggal >= %s ORDER BY tanggal ASC Limit 4 ",
+            date('Y-m-d') // Format tanggal untuk hari ini
+        );
+    
+        return $wpdb->get_results($query);
+    }
+    
+    // Menambah notifikasi baru
+    public function add($data) {
+        global $wpdb;
+        $wpdb->insert($this->table_name, $data);
+        return $wpdb->insert_id;
+    }
+
+    // Mengupdate notifikasi
+    public function update($id, $data) {
+        global $wpdb;
+        return $wpdb->update($this->table_name, $data, ['id' => $id]);
+    }
+
+    // Menghapus notifikasi
+    public function delete($id) {
+        global $wpdb;
+        return $wpdb->delete($this->table_name, ['id' => $id]);
+    }
+
+    public function delete_by_chain($chain) {
+        global $wpdb;
+        return $wpdb->delete($this->table_name, ['chain' => $chain]);
+    }
+
+    
+
+    // Mendapatkan notifikasi berdasarkan ID
+    public function get_by_id($id) {
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT * FROM {$this->table_name} WHERE id = %d", $id);
+        return $wpdb->get_row($query);
+    }
+}

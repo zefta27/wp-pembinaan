@@ -4,13 +4,24 @@
 namespace WP_Pembinaan\Controllers;
 
 use WP_Pembinaan\Models\PegawaiModel;
+use WP_Pembinaan\Models\NotifikasiModel;
+use WP_Pembinaan\Models\HonorerModel;
+use WP_Pembinaan\Controllers\NotifikasiController;
+use WP_Pembinaan\Services\Utils;
 
 class PegawaiController {
     private $pegawai_model;
+    private $notifikasi_controller;
+    private $notifikasi_model;
+    private $honorer_m ; 
+    private $utils;
 
     public function __construct() {
         $this->pegawai_model = new PegawaiModel();
-
+        $this->notifikasi_controller = new NotifikasiController();
+        $this->notifikasi_model = new NotifikasiModel();
+        $this->honorer_m = new HonorerModel();
+        $this->utils = new Utils();
         add_action('admin_post_add_pegawai', array($this, 'add_pegawai'));
         add_action('admin_post_edit_pegawai', array($this, 'edit_pegawai'));
         add_action('admin_post_delete_pegawai', array($this, 'delete_pegawai'));
@@ -42,13 +53,13 @@ class PegawaiController {
                 'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
                 'status_fungsional' => sanitize_text_field($_POST['status_fungsional'])
             ];
-           
-            // Lakukan perhitungan atau logika sebelum insert
-            $id = $this->pegawai_model->insert($data); // Mengembalikan ID dari pegawai baru
-            // $this->kenaikan_gaji_service->calculate($id, $data['nip'], $data['nrp'], $data['status_fungsional']);
-            // $this->kenaikan_pangkat_service->calculate($id, $data['nip'], $data['nrp']);
-
-            // Redirect setelah proses selesai
+            $nip = $data['nip'];
+            $data['tanggal_lahir'] = $this->utils->nipToTanggalLahir($nip);
+            // Tambahkan Notfikasi Ultah    
+            $this->notifikasi_controller->add_ultah_from_nip($data['nama'], $nip);
+            $this->notifikasi_controller->add_kgb_from_pegawai($data);
+            $this->pegawai_model->insert($data); // Mengembalikan ID dari pegawai baru
+            
             wp_redirect(admin_url('admin.php?page=pegawai'));
             exit;
         }
@@ -75,16 +86,23 @@ class PegawaiController {
     }
 
     public function delete_pegawai() {
-        if (isset($_GET['id'])) {
+        if (isset($_GET['id'])&&isset($_GET['nip'])) {
             $id = intval($_GET['id']);
+            $nip = intval($_GET['nip']);
+
             $this->pegawai_model->delete($id);
-        }
+            $this->notifikasi_model->delete_by_chain($nip);
+        }   
         wp_redirect(admin_url('admin.php?page=pegawai'));
         exit;
     }
 
     public function display_page() {
         $employees = $this->pegawai_model->get_all();
-        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/views/pegawai/view-pegawai-list.php';
+        $honorers = $this->honorer_m->get_all();
+        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/views/pegawai-view.php';
     }
+    
+ 
+
 }
