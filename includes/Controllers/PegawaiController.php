@@ -100,7 +100,7 @@ class PegawaiController {
     public function display_page() {
         $employees = $this->pegawai_model->get_all();
         $honorers = $this->honorer_m->get_all();
-        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/views/pegawai-view.php';
+        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/Views/pegawai-view.php';
     }
     
  

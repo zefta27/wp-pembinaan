@@ -24,7 +24,7 @@ class DashboardController {
         $notifikasi = $this->notifikasi_model->get_now_to_future();
 
         if (get_query_var('dashboard_page')) {
-            include plugin_dir_path(__FILE__) . '../views/dashboard-view.php';
+            include plugin_dir_path(__FILE__) . '../Views/dashboard-view.php';
             exit;
         }
     }
