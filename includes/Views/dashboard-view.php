@@ -8,6 +8,13 @@ use WP_Pembinaan\Services\Utils;
 // Inisialisasi kelas Utils
 $utils = new Utils();
 
+// function enqueue_dashboard_styles() {
+//   wp_enqueue_style('dashboard-styles', plugins_url('/assets/css/style.css', __FILE__), array(), '1.0.0', 'all');
+// }
+// add_action('wp_enqueue_scripts', 'enqueue_dashboard_styles'); // Untuk frontend
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,355 +22,32 @@ $utils = new Utils();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Papan Notifikasi</title>
-    <style>
-        html{
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-        }
-        body {
-            background: linear-gradient(to bottom right, #4B4C51, #203D47);
-            height: 100vh;
-            width: 100vw;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding-left:10px;
-        }
-
-        .header {
-            text-align: center;
-            padding: 20px;
-        }
-
-        h1, h3 {
-            margin: 0;
-        }
-        canvas{
-            color:white !important;
-        }
-        .clock {
-            font-size: 24px;
-            margin-top: 10px;
-        }
-
-        /* Timeline container */
-        .timeline {
-            flex-grow: 3 !important;
-            position: relative;
-            max-width: 900px;
-            margin: 20px auto;
-            padding-left: 40px; /* Increase padding to avoid overlap with the line */
-        }
-
-        /* Each timeline item */
-        .timeline-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px; /* Adjust this if the space is too much */
-            position: relative;
-            padding-top: 15px; /* Add padding to top for visual alignment */
-        }
-        .calendar-container{
-            flex-grow: 2 !important;
-        }
-
-        /* Circle on the left side */
-        .timeline-item::before {
-            content: '';
-            width: 12px;
-            height: 12px;
-            background-color: #fff;
-            border: 2px solid #FF9F3F ;
-            border-radius: 50%;
-            position: absolute;
-            left: -50px; /* Adjusted for visual correctness */
-            top: 40px; /* Adjust this to position the circle correctly */
-        }
-
-        /* Vertical line */
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: -43px; /* Position the line left of the circle */
-            top: 50px; /* Start a bit lower to align with the middle of the circle */
-            width: 2px;
-            height: calc(100% + 10px); /* Extend the line to connect to the next circle */
-            background-color: #FF9F3F ;
-            z-index: -1;
-        }
-
-        /* Last item should not have the after line */
-        .timeline-item:last-child::after {
-            display: none;
-        }
-
-        /* The actual card */
-        .timeline-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding:30px 20px;
-            margin-left: -15x;
-            box-shadow: 0 4px 8px rgba(128, 128, 128, 0.5);
-            width: 100%;
-        }
-
-        .timeline-content h4 {
-            margin: 0 0 10px 0;
-            font-size: 20px;
-        }
-
-        .timeline-content p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .timeline-date{
-            position: absolute;
-            background-color: #FF9F3F;
-            padding: 6px 10px 6px 10px;
-            border-radius: 5px;
-            top: 2px;
-            left: -2px;
-        }
-        .timeline-tipe{
-            background-color: #EBECEE;
-            padding: 5px 14px;
-            border-radius: 14px;
-            width: fit-content;
-            position: absolute;
-            bottom: 10px;
-            right: 12px;
-            color: #453c3c;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        /* container */
-        .container {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
-
-        .timeline, .calendar-container {
-            margin: 0 10px; /* Add some space between them */
-        }
-
-        .calendar-container {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            width: 300px;
-            margin: 20px;
-            box-shadow: 0 4px 8px rgba(128, 128, 128, 0.5);
-        }
-
-      
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap');
-
-        :root {
-            --calendar-bg-color: rgba(255, 255, 255, 0.2);
-            --calendar-font-color: black;
-            --weekdays-border-bottom-color: #404040;
-            --calendar-date-hover-color: #505050;
-            --calendar-current-date-color: #1b1f21;
-            --calendar-today-color: linear-gradient(to bottom, #03a9f4, #2196f3);
-            --calendar-today-innerborder-color: transparent;
-            --calendar-nextprev-bg-color: transparent;
-            --next-prev-arrow-color : #FFF;
-            --calendar-border-radius: 16px;
-            --calendar-prevnext-date-color: #484848
-        }
-
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        .calendar {
-            font-family: 'IBM Plex Sans', sans-serif;
-            position: relative;
-            max-width: 400px; /*change as per your design need */
-            min-width: 320px;
-            /* background: var(--calendar-bg-color); */
-            background: rgba(255, 255, 255, 0.2); 
-            color: black;
-            margin: 20px auto;
-            box-sizing: border-box;
-            overflow: hidden;
-            font-weight: normal;
-            border-radius: var(--calendar-border-radius);
-        }
-
-        .calendar-inner {
-            padding: 10px 10px;
-        }
-
-        .calendar .calendar-inner .calendar-body {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-        }
-
-        .calendar .calendar-inner .calendar-body div {
-            padding: 4px;
-            min-height: 30px;
-            line-height: 30px;
-            border: 1px solid transparent;
-            margin: 10px 2px 0px;
-        }
-
-        .calendar .calendar-inner .calendar-body div:nth-child(-n+7) {
-            border: 1px solid transparent;
-            border-bottom: 1px solid var(--weekdays-border-bottom-color);
-        }
-
-        .calendar .calendar-inner .calendar-body div:nth-child(-n+7):hover {
-            border: 1px solid transparent;
-            border-bottom: 1px solid var(--weekdays-border-bottom-color);
-        }
-
-        .calendar .calendar-inner .calendar-body div>a {
-            color: var(--calendar-font-color);
-            text-decoration: none;
-            display: flex;
-            justify-content: center;
-        }
-
-        .calendar .calendar-inner .calendar-body div:hover {
-            border: 1px solid var(--calendar-date-hover-color);
-            border-radius: 4px;
-        }
-
-        .calendar .calendar-inner .calendar-body div.empty-dates:hover {
-            border: 1px solid transparent;
-        }
-
-        .calendar .calendar-inner .calendar-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        .calendar .calendar-inner .calendar-today-date {
-            display: grid;
-            text-align: center;
-            cursor: pointer;
-            margin: 3px 0px;
-            background: white;
-            /* background: var(--calendar-current-date-color); */
-            padding: 8px 0px;
-            border-radius: 10px;
-            width: 80%;
-            margin: auto;
-        }
-
-        .calendar .calendar-inner .calendar-controls .calendar-year-month {
-            display: flex;
-            min-width: 100px;
-            justify-content: space-evenly;
-            align-items: center;
-        }
-
-        .calendar .calendar-inner .calendar-controls .calendar-next {
-            text-align: right;
-        }
-
-        .calendar .calendar-inner .calendar-controls .calendar-year-month .calendar-year-label,
-        .calendar .calendar-inner .calendar-controls .calendar-year-month .calendar-month-label {
-            font-weight: 500;
-            font-size: 20px;
-        }
-
-        .calendar .calendar-inner .calendar-body .calendar-today {
-            background: var(--calendar-today-color);
-            border-radius: 4px;
-        }
-
-        .calendar .calendar-inner .calendar-body .calendar-today:hover {
-            border: 1px solid transparent;
-        }
-
-        .calendar .calendar-inner .calendar-body .calendar-today a {
-            outline: 2px solid var(--calendar-today-innerborder-color);
-        }
-
-        .calendar .calendar-inner .calendar-controls .calendar-next a,
-        .calendar .calendar-inner .calendar-controls .calendar-prev a {
-            color: var(--calendar-font-color);
-            font-family: arial, consolas, sans-serif;
-            font-size: 26px;
-            text-decoration: none;
-            padding: 4px 12px;
-            display: inline-block;
-            /* background: var(--calendar-nextprev-bg-color); */
-            background: var(--calendar-nextprev-bg-color);
-            margin: 10px 0 10px 0;
-        }
-
-        .calendar .calendar-inner .calendar-controls .calendar-next a svg,
-        .calendar .calendar-inner .calendar-controls .calendar-prev a svg {
-            height: 20px;
-            width: 20px;
-        }
-
-        .calendar .calendar-inner .calendar-controls .calendar-next a svg path,
-        .calendar .calendar-inner .calendar-controls .calendar-prev a svg path{
-            fill: var(--next-prev-arrow-color);
-        }
-
-        .calendar .calendar-inner .calendar-body .prev-dates,
-        .calendar .calendar-inner .calendar-body .next-dates {
-            color: var(--calendar-prevnext-date-color);
-        }
-
-        .calendar .calendar-inner .calendar-body .prev-dates:hover,
-        .calendar .calendar-inner .calendar-body .next-dates:hover {
-        border: 1px solid transparent;
-        pointer-events: none;
-        }
-        .clock {
-            max-width: 700px !important;
-            margin-top: 10px;
-            display: inline-block;
-            padding: 20px 40px;
-            background: rgba(255, 255, 255, 0.2); /* Warna transparan */
-            border-radius: 15px;
-            backdrop-filter: blur(10px); /* Efek blur seperti kaca beku */
-            -webkit-backdrop-filter: blur(10px); /* Cross-browser support */
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: white;
-            font-family: 'Arial', sans-serif;
-            letter-spacing: 2px;
-            text-align: center;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .clock:hover {
-            transform: scale(1.05); /* Sedikit memperbesar saat di-hover */
-        }
-        .glass {
-            padding: 14px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            font-size: 18px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            color: white;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-    </style>
+    <?php wp_head(); ?>
 </head>
+<style>
+  html{
+      height: 100vh !important;
+      width: 100vw;
+      overflow: hidden;
+      margin: 0 !important;
+      padding: 0;
+  }
+  body {
+      background: linear-gradient(to bottom right, #4B4C51, #203D47);
+      height: 100vh !important;
+      width: 100vw;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding-left:10px;
+      margin: 0 !important;
+  }
+  h1, h3 {
+      margin: 0;
+  }
+  canvas{
+      color:white !important;
+  }
+</style>
 <body>
     <div class="header">
         <h1>Papan Kontrol Pembinaan</h1>
@@ -373,26 +57,29 @@ $utils = new Utils();
     <div class="container">
         <!-- Timeline container -->
         <div class="timeline">
-            <?php if (!empty($notifikasi)): ?>
-                <?php foreach ($notifikasi as $notif): ?>
-                    <div class="timeline-item">
-                        <span class="timeline-date">
-                            <?php echo esc_html($utils->formatTanggal($notif->tanggal)); ?>
-                        </span>
-                        <div class="timeline-content">
-                            <h4><?php echo esc_html($notif->nama); ?></h4>
-                            <p><?php echo esc_html($notif->deskripsi); ?></p>
-                            <span class="timeline-tipe">
-                                <?php echo esc_html($notif->tipe); ?>
-                            </span>
-                            
-                        </div>
+            <?php 
+               $today = date('d - m - Y'); // Format today's date to match the date format in your data
+              foreach ($grouped_notifications as $date => $types): ?>
+                <div class="timeline-item">
+                    <span class="timeline-date"><?php echo $date; ?></span>
+                    <div class="timeline-content <?php echo ($date === $today) ? 'pulse' : ''; ?>">
+                      <?php foreach ($types as $type => $details): ?>
+                              <span class="timeline-jenis"><?php echo str_replace('-', ' ', ucfirst($type)); ?></span>
+                              <ul>
+                                  <?php foreach ($details as $detail): ?>
+                                      <li>
+                                          <span style="font-weight:600"><?= $detail['nama'] ?></span><br>
+                                          <?= $detail['deskripsi'] ?>
+                                      </li>
+                                  <?php endforeach; ?>
+                              </ul>
+                      <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>Tidak ada notifikasi yang tersedia.</p>
-            <?php endif; ?>
+
+                </div>
+            <?php endforeach; ?>
         </div>
+
         <div class="calendar-container">
             <h3>Total Pegawai</h3>
             <div style="display:flex;flex-direction:row;gap:10px;">

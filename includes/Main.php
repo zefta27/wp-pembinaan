@@ -32,7 +32,8 @@ class Main {
         $this->public_assets->initialize();
         // Pastikan rewrite rules ditambahkan
         add_action('init', array($this->dashboard_controller, 'initialize'));
-
+        add_action('init', array($this->notifikasi_controller, 'initialize'));
+        flush_rewrite_rules(); 
         // Aktifkan plugin
         $this->activate();
     }

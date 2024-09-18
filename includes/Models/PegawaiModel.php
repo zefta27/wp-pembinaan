@@ -26,10 +26,13 @@ class PegawaiModel {
             eselon varchar(255) NOT NULL,
             status_fungsional varchar(255) NOT NULL,
             is_pejabat_struktural boolean NOT NULL DEFAULT false,
-            tanggal_lahir date NOT NULL,      
-            kgb date NOT NULL, 
+            tanggal_lahir date NOT NULL,
+            kgb date NOT NULL,
+            agama varchar(255) NOT NULL, -- New agama column
+            foto varchar(255) DEFAULT NULL, -- New foto column with default NULL
             PRIMARY KEY  (id)
         ) $charset_collate;";
+
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
@@ -43,6 +46,11 @@ class PegawaiModel {
     public function update($id, $data) {
         global $wpdb;
         $wpdb->update($this->table_name, $data, ['id' => $id]);
+    }
+
+    public function update_kgb($nip, $kgb) {
+        global $wpdb;
+        $wpdb->update($this->table_name, ['kgb'=>$kgb], ['nip' => $nip]);
     }
 
     public function delete($id) {

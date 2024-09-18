@@ -1,0 +1,42 @@
+.callout {
+  border: 1px solid #0073aa;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #e1f5fe, #f6fcff);
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 20px;
+  position: relative; /* Required for absolute positioning of the icon */
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+/* Large Icon Styling */
+.fa-large-icon {
+  font-size: 80px; /* Adjust the size as needed */
+  color: #fff; /* Adjust the color */
+  opacity: 0.9; /* Low opacity */
+  position: absolute; /* Positioning the icon */
+  right: 20px; /* Position on the right side */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  pointer-events: none; /* Prevent interaction with the icon */
+}
+
+.outline-orange {
+  background-color: white !important;
+  border: 1px solid #FF8036 !important;
+  color: #FF8036 !important;
+}
+
+.bg-orange {
+  background-color: #FF8036 !important;
+  border: none !important;
+}
+
+.bg-orange-light {
+  border: none !important;
+  background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
+}
+
+/*# sourceMappingURL=admin.css.map */

@@ -43,9 +43,12 @@ $gol_pangkat_tu = [
 
 <!-- Tab 1: Daftar Pegawai -->
 <div id="tab-pegawai" class="tab-content active" style="padding-top:20px;">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahPegawaiModal">
-        Tambah Pegawai
-    </button>
+    <div class="callout bg-orange-light">
+        <button type="button" class="btn btn-primary outline-orange" data-toggle="modal" data-target="#tambahPegawaiModal">
+            <i class="fa fa-plus"></i>&nbsp; Tambah Pegawai
+        </button>
+        <i class="fa fa-plus fa-large-icon"></i> <!-- Large Icon -->
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="tambahPegawaiModal" tabindex="-1" aria-labelledby="tambahPegawaiModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -56,7 +59,7 @@ $gol_pangkat_tu = [
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="formTambahPegawai" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+                <form id="formTambahPegawai" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" enctype="multipart/form-data">
                     <?php wp_nonce_field('pegawai_add_action', 'pegawai_nonce'); ?>
                     <input type="hidden" name="action" value="add_pegawai">
 
@@ -66,6 +69,7 @@ $gol_pangkat_tu = [
                             <label for="nama">Nama</label>
                             <input type="text" class="form-control" id="nama" name="nama" required>
                         </div>
+
                         <div class="form-group">
                             <label for="status_fungsional">Status Fungsional</label>
                             <select class="form-control" id="status_fungsional" name="status_fungsional" required style="max-width:100% !important;">
@@ -73,10 +77,12 @@ $gol_pangkat_tu = [
                                 <option value="Tata Usaha">Tata Usaha</option>
                             </select>
                         </div>
+
                         <div class="form-group">
                             <label for="jabatan">Jabatan</label>
                             <input type="text" class="form-control" id="jabatan" name="jabatan" required>
                         </div>
+
                         <div class="form-group">
                             <label for="gol_pangkat">Golongan/Pangkat</label>
                             <select class="form-control" id="gol_pangkat" name="gol_pangkat" required style="max-width:100% !important;">
@@ -84,22 +90,57 @@ $gol_pangkat_tu = [
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="eselon">Eselon</label>
+                            <select name="eselon" id="eselon" class="form-control" style="max-width: 100%;">
+                                <option value="Non Eselon">Non Eselon</option>
+                                <option value="I">I</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                                <option value="V">V</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bidang">Bidang</label>
+                            <select name="bidang" id="bidang" class="form-control" style="max-width: 100%;">
+                                <option value="Pembinaan">Pembinaan</option>
+                                <option value="Intelijen">Intelijen</option>
+                                <option value="Pemulihan Aset & Barang Rampasan">Pemulihan Aset & Barang Rampasan</option>
+                                <option value="Perdata dan Tata Usaha">Perdata dan Tata Usaha</option>
+                                <option value="Tindak Pidana Umum">Tindak Pidana Umum</option>
+                                <option value="Tindak Pidana Khusus">Tindak Pidana Khusus</option>
+                                <option value="Non Bidang">Non Bidang</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="nip">NIP</label>
                             <input type="text" class="form-control" id="nip" name="nip" required>
                         </div>
+
                         <div class="form-group">
                             <label for="nrp">NRP</label>
                             <input type="text" class="form-control" id="nrp" name="nrp" required>
                         </div>
+
                         <div class="form-group">
                             <label for="no_hp">No HP</label>
                             <input type="text" class="form-control" id="no_hp" name="no_hp" required>
                         </div>
+
                         <div class="form-group">
                             <label for="kgb">KGB (Kenaikan Gaji Berkala)</label>
                             <input type="date" class="form-control" id="kgb" name="kgb" required>
                         </div>
-                     
+
+                        <div class="form-group">
+                            <label for="agama">Agama</label>
+                            <input type="text" class="form-control" id="agama" name="agama" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="foto">Foto</label>
+                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+                        </div>
                     </div>
 
                     <div class="modal-footer">
@@ -107,6 +148,7 @@ $gol_pangkat_tu = [
                         <input type="submit" class="btn btn-primary" value="Simpan">
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -150,11 +192,15 @@ $gol_pangkat_tu = [
 </div>
 
 <!-- Tab 2: Pegawai Tidak Tetap (PTT) -->
-<div id="tab-ptt" class="tab-content">
+<div id="tab-ptt" class="tab-content"  style="padding-top:20px;">
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahHonorerModal">
-         Tambah Pegawai Honorer
-    </button>
+    <div class="callout bg-orange-light">
+        <button type="button" class="btn btn-primary bg-orange" data-toggle="modal" data-target="#tambahHonorerModal">
+            Tambah Pegawai Honorer
+        </button>
+        <i class="fa fa-plus fa-large-icon"></i> <!-- Large Icon -->
+    </div>
+  
 
     <!-- Modal -->
     <div class="modal fade" id="tambahHonorerModal" tabindex="-1" aria-labelledby="tambahHonorerModalLabel" aria-hidden="true">
@@ -166,8 +212,10 @@ $gol_pangkat_tu = [
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="formTambahPegawai" action="your-action-url" method="POST">
-                    <div class="modal-body">
+                <form id="formTambahHonorer" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" >
+                        <?php wp_nonce_field('honorer_add_action', 'honorer_nonce'); ?>
+                        <input type="hidden" name="action" value="add_honorer">
+                        <div class="modal-body">
                         <!-- Form untuk menambahkan pegawai honorer baru -->
                         <div class="form-group">
                             <label for="nama">Nama</label>

@@ -4,13 +4,7 @@
 
 <div class="wrap">
    <!-- Tombol Tambah -->
-    <div class="callout" style="
-    border: 1px solid #0073aa;
-    border-radius: 8px;
-    background: linear-gradient(to bottom, #e1f5fe, #f6fcff);
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;padding:20px;">
+    <div class="callout">
         <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#tambahNotifikasiModal">
         Tambah Notifikasi
         </button>
@@ -43,6 +37,16 @@
                         </div>
                         <div class="form-group">
                             <label for="tipe">Tipe</label>
+                            <select name="tipe" id="tipe" class="form-control">
+                                <option value="Ulang Tahun">Ulang Tahun</option>
+                                <option value="KGB">Kenaikan Gaji Berkala</option>
+                                <option value="Kenaikan Pangkat">Kenaikan Pangkat</option>
+                                <option value="Laporan Triwulan">Laporan Triwulan</option>
+                                <option value="Laporan Tahunan">Laporan Tahunan</option>
+                                <option value="Satya Lencana">Satya Lencana</option>
+                                <option value="Pengumuman">Pengumuman</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                             <input type="text" class="form-control" name="tipe" required>
                         </div>
                         <div class="form-group">

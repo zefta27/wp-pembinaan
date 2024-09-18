@@ -39,6 +39,25 @@ class PegawaiController {
        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
            
+             // Handle image upload
+            $foto = '';
+            if (!empty($_FILES['foto']['name'])) {
+                $uploaded_file = $_FILES['foto'];
+
+                // WordPress file upload handler
+                $upload_overrides = ['test_form' => false]; // Skip form validation
+                $movefile = wp_handle_upload($uploaded_file, $upload_overrides);
+
+                if ($movefile && !isset($movefile['error'])) {
+                    // File is uploaded successfully, add the file URL to the data array
+                    $foto = $movefile['url']; // Save the URL of the uploaded image
+                } else {
+                    // Handle upload error
+                    echo "Error uploading file: " . $movefile['error'];
+                    exit;
+                }
+            } 
+
             // Ambil data dari form
             $data = [
                 'nama' => sanitize_text_field($_POST['nama']),
@@ -50,9 +69,12 @@ class PegawaiController {
                 'nrp' => sanitize_text_field($_POST['nrp']),
                 'no_hp' => sanitize_text_field($_POST['no_hp']),
                 'kgb' => sanitize_text_field($_POST['kgb']),
+                'agama' => sanitize_text_field($_POST['agama']),
+                'foto' => $foto, 
                 'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
                 'status_fungsional' => sanitize_text_field($_POST['status_fungsional'])
             ];
+          
             $nip = $data['nip'];
             $data['tanggal_lahir'] = $this->utils->nipToTanggalLahir($nip);
             // Tambahkan Notfikasi Ultah    

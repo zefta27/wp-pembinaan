@@ -51,6 +51,61 @@ class NotifikasiModel {
     
         return $wpdb->get_results($query);
     }
+    public function cek_renewal($tipe) {
+        global $wpdb;
+        $yesterday = date('Y-m-d', strtotime('-1 day')); // Menghitung tanggal kemarin
+    
+        $query = $wpdb->prepare(
+            "SELECT * FROM {$this->table_name}
+             WHERE tipe = %s
+             AND tanggal = %s", 
+             $tipe, $yesterday
+        );
+    
+        return $wpdb->get_results($query);
+    }
+
+ 
+    public function cek_existing_date($tipe, $chain, $tanggal) {
+        global $wpdb;
+       
+        $query = $wpdb->prepare(
+            "SELECT * FROM {$this->table_name}
+             WHERE tipe = '%s'
+             AND tanggal = %s
+             AND chain = %s", 
+            $tipe, $tanggal, $chain
+        );
+    
+        return $wpdb->get_results($query);
+    }
+    
+    // public function cek_kgb_notif($tanggal, $)
+
+    public function grouping_timeline() {
+        global $wpdb;
+        $query = $wpdb->prepare(
+            "SELECT tanggal, tipe, nama, deskripsi
+             FROM {$this->table_name}
+             WHERE tanggal >= %s
+             ORDER BY tanggal ASC, tipe",
+            date('Y-m-d') // Today's date
+        );
+        
+        $results = $wpdb->get_results($query);
+        $grouped = [];
+    
+        foreach ($results as $row) {
+            $formatted_date = date('d - m - Y', strtotime($row->tanggal));
+            $grouped[$formatted_date][$row->tipe][] = [
+                'nama' => $row->nama,
+                'deskripsi' => $row->deskripsi
+            ];
+        }
+    
+        return $grouped;
+    }
+    
     
     // Menambah notifikasi baru
     public function add($data) {

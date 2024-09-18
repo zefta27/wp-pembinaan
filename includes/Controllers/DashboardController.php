@@ -15,19 +15,21 @@ class DashboardController {
         // Daftarkan tindakan untuk menangani template dan query var
         add_action('template_redirect', array($this, 'index'));
         add_filter('query_vars', array($this, 'add_query_vars'));
-
+   
     }
-
+   
+      
+    
     // Fungsi untuk menangani tampilan halaman dashboard
     public function index() {
-        // Periksa apakah query var 'dashboard_page' ada
-        $notifikasi = $this->notifikasi_model->get_now_to_future();
-
+        $grouped_notifications = $this->notifikasi_model->grouping_timeline();
+    
+        // Include the view file and pass the grouped data to it
         if (get_query_var('dashboard_page')) {
             include plugin_dir_path(__FILE__) . '../Views/dashboard-view.php';
-            exit;
         }
     }
+    
 
     // Fungsi untuk menambahkan aturan rewrite untuk halaman dashboard
     public function initialize() {
