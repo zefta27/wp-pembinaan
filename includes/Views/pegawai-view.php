@@ -178,9 +178,6 @@ $gol_pangkat_tu = [
                     <td><?php echo $employee->status_fungsional; ?></td> 
                     <td><?php echo $employee->kgb; ?></td>
                     <td style="display:flex;flex-direction:column;gap:6px;">
-                        <a href="#" class="button edit-button btn" data-id="<?php echo $employee->id; ?>" data-nama="<?php echo $employee->nama; ?>" data-jabatan="<?php echo $employee->jabatan; ?>" data-gol_pangkat="<?php echo $employee->gol_pangkat; ?>" data-nip="<?php echo $employee->nip; ?>" data-nrp="<?php echo $employee->nrp; ?>" data-no_hp="<?php echo $employee->no_hp; ?>" data-status_fungsional="<?php echo $employee->status_fungsional; ?>">
-                            <span class="dashicons dashicons-edit"></span> Edit
-                        </a>
                         <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_pegawai&id=' . $employee->id.'&nip='.$employee->nip)); ?>" class="button delete-button btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');">
                             <span class="dashicons dashicons-trash"></span> Hapus
                         </a>

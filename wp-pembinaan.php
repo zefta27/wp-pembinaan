@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
 
 define('WP_PEMBINAAN_VERSION', '1.0');
 define('WP_PEMBINAAN_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('UMUR_PENSIUN_JAKSA',60);
+define('UMUR_PENSIUN_TU',58);
 
 // Include Composer autoloader
 require_once __DIR__ . '/vendor/autoload.php';

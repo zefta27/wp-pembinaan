@@ -52,4 +52,28 @@ class Utils {
            
         
     }
-}
+    public function nipToTanggalMasuk($nip){
+        $tahun = substr($nip, 8, 4);
+        $bulan = substr($nip, 12, 2);
+        $tanggal = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); // Tentukan tanggal terakhir bulan tersebut
+        $tanggal_masuk = $tahun . '-' . $bulan . '-' . $tanggal;
+            
+        return $tanggal_masuk;
+
+    }
+    public function convertToUmur($tanggal_lahir, $tanggal_perbandingan){
+        // Gunakan \DateTime untuk merujuk pada kelas DateTime bawaan PHP di global namespace
+        $lahir = new \DateTime($tanggal_lahir);
+        $perbandingan = new \DateTime($tanggal_perbandingan);
+        
+        // Hitung selisih antara kedua tanggal
+        $selisih = $lahir->diff($perbandingan);
+        
+        // Umur dihitung dalam tahun
+        $umur = $selisih->y;
+        
+        return $umur;
+    }
+    
+    
+} 

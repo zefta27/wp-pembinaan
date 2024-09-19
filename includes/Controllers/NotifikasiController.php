@@ -24,7 +24,7 @@ class NotifikasiController {
     
     public function index(){
         $notifikasi = $this->notifikasi_m->get_all();
-        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/views/notifikasi-view.php';
+        include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/Views/notifikasi-view.php';
     
     }
     public function activate() {
@@ -119,10 +119,32 @@ class NotifikasiController {
             'tipe' => 'kgb',
             'tanggal'=> $this->utils->kurangkanDuaBulan($data['kgb']),
             'chain' => $data['nip']
-        ];           
+        ];          
         $this->notifikasi_m->add($data_notif);
     }
+    public function add_satyalencana_from_pegawai($data, $tanggal_masuk){
+        $status_fungsional = $data['status_fungsional'];
+        $batas_pensiun = ($status_fungsional == 'Tata Usaha') ? UMUR_PENSIUN_TU : UMUR_PENSIUN_JAKSA;
+        $umur = $this->utils->convertToUmur($data['tanggal_lahir'], $tanggal_masuk);
+        $tanggal_satya_lencana = date('Y-m-d', strtotime($tanggal_masuk . ' +10 years'));
+        $satya_lencana = 'X';
+        while($umur<$batas_pensiun){
+            if($tanggal_satya_lencana>date('Y-m-d')){
 
+                $data_notif = [
+                    'nama' => 'Satya Lencana '.$satya_lencana.' '.$data['nama'],
+                    'deskripsi' => 'Penghargaan Satya Lencana ke-'.$satya_lencana.' a.n. :'.$data['nama'].', pada tanggal :'.$tanggal_satya_lencana,
+                    'tipe' => 'Satya Lencana',
+                    'tanggal'=> $tanggal_satya_lencana,
+                    'chain' => $data['nip']
+                ];          
+                $this->notifikasi_m->add($data_notif);
+            }
+            $umur = $umur + 10;
+            $satya_lencana = $satya_lencana.'X';
+            $tanggal_satya_lencana = date('Y-m-d', strtotime($tanggal_satya_lencana . ' +10 years'));
+        }
+    } 
     public function initialize() {
         add_rewrite_rule(
             '^cek_renewal/?$',  // URL yang diakses oleh user

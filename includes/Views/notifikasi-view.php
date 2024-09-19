@@ -63,7 +63,7 @@
     </div>
     </div>
 
-    <table id="notifikasiTable" class="wp-list-table widefat fixed striped table-view-list" >
+    <table id="notifikasiTable" class="wp-list-table widefat fixed striped table-view-list">
         <thead>
             <tr>
                 <th>Nama</th>
@@ -80,7 +80,7 @@
                         <td><?php echo esc_html($notif->nama); ?></td>
                         <td><?php echo esc_html($notif->deskripsi); ?></td>
                         <td><?php echo esc_html($notif->tipe); ?></td>
-                        <td><?php echo esc_html($notif->tanggal); ?></td>
+                        <td><?php echo esc_html($notif->tanggal); ?></td> <!-- Pastikan format tanggal sesuai -->
                         <td>
                             <a class="button btn" href="<?php echo admin_url('admin.php?page=edit_notifikasi&id=' . $notif->id); ?>">
                                 <span class="dashicons dashicons-edit"></span> Edit
@@ -94,22 +94,22 @@
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="6">Tidak ada notifikasi ditemukan.</td>
+                    <td colspan="5">Tidak ada notifikasi ditemukan.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
+
     <!-- JavaScript for Tab Switching and DataTables Initialization -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-          
-
             // Initialize DataTable
             jQuery('#notifikasiTable').DataTable({
                 "paging": true,
                 "searching": true,
                 "ordering": true,
                 "info": true,
+                "order": [[3, "asc"]], // Urutkan kolom ke-4 (Tanggal) secara descending (DESC)
                 "language": {
                     "lengthMenu": "Tampilkan _MENU_ notifikasi per halaman",
                     "zeroRecords": "Tidak ada notifikasi ditemukan",
@@ -127,6 +127,7 @@
             });
         });
     </script>
+
 
 
 </div>

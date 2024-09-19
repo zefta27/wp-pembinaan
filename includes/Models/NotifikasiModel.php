@@ -36,9 +36,11 @@ class NotifikasiModel {
     // Mendapatkan semua notifikasi
     public function get_all() {
         global $wpdb;
-        $query = "SELECT * FROM {$this->table_name}";
+        // Tambahkan ORDER BY untuk mengurutkan berdasarkan kolom tanggal dari yang terdekat (ASC)
+        $query = "SELECT * FROM {$this->table_name} ORDER BY tanggal ASC";
         return $wpdb->get_results($query);
     }
+    
 
     public function get_now_to_future() {
         global $wpdb;

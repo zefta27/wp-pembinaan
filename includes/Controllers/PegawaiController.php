@@ -77,31 +77,14 @@ class PegawaiController {
           
             $nip = $data['nip'];
             $data['tanggal_lahir'] = $this->utils->nipToTanggalLahir($nip);
+            $tanggal_masuk = $this->utils->nipToTanggalMasuk($nip);
+            
             // Tambahkan Notfikasi Ultah    
             $this->notifikasi_controller->add_ultah_from_nip($data['nama'], $nip);
             $this->notifikasi_controller->add_kgb_from_pegawai($data);
+            $this->notifikasi_controller->add_satyalencana_from_pegawai($data, $tanggal_masuk);
             $this->pegawai_model->insert($data); // Mengembalikan ID dari pegawai baru
             
-            wp_redirect(admin_url('admin.php?page=pegawai'));
-            exit;
-        }
-    }
-
-    public function edit_pegawai() {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id = intval($_POST['id']);
-            $data = [
-                'nama' => sanitize_text_field($_POST['nama']),
-                'jabatan' => sanitize_text_field($_POST['jabatan']),
-                'gol_pangkat' => sanitize_text_field($_POST['gol_pangkat']),
-                'nip' => sanitize_text_field($_POST['nip']),
-                'nrp' => sanitize_text_field($_POST['nrp']),
-                'no_hp' => sanitize_text_field($_POST['no_hp']),
-                'status_fungsional' => sanitize_text_field($_POST['status_fungsional']),
-                'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
-            ];
-            $this->pegawai_model->update($id, $data);
-
             wp_redirect(admin_url('admin.php?page=pegawai'));
             exit;
         }
