@@ -63,6 +63,33 @@ class PegawaiModel {
         return $wpdb->get_results("SELECT * FROM $this->table_name");
     }
 
+    public function get_count()
+    {
+        global $wpdb;
+        return $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
+    }
+
+    public function get_count_by_status_fungsional()
+    {
+        global $wpdb;
+        
+        // Mengambil jumlah data yang dikelompokkan berdasarkan status_fungsional
+        $results = $wpdb->get_results("
+            SELECT status_fungsional, COUNT(*) as total 
+            FROM $this->table_name 
+            GROUP BY status_fungsional
+        ");
+    
+        return $results;
+    }
+    public function get_count_sel_by_status_fungsional($status_fungsional)
+    {
+        global $wpdb;
+        // Menggunakan %s untuk string dan prepare() untuk keamanan
+        $query = $wpdb->prepare("SELECT COUNT(*) FROM $this->table_name WHERE status_fungsional = %s", $status_fungsional);
+        return $wpdb->get_var($query);
+    }
+
     public function get($id) {
         global $wpdb;
         return $wpdb->get_row($wpdb->prepare("SELECT * FROM $this->table_name WHERE id = %d", $id));

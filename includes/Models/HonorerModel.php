@@ -50,6 +50,11 @@ class HonorerModel {
         global $wpdb;
         return $wpdb->get_results("SELECT * FROM $this->table_name");
     }
+    public function get_count()
+    {
+        global $wpdb;
+        return $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
+    }
 
     public function get($id) {
         global $wpdb;

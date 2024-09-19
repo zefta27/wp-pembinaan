@@ -3,14 +3,20 @@
 namespace WP_Pembinaan\Controllers;
 
 use WP_Pembinaan\Models\NotifikasiModel;
+use WP_Pembinaan\Models\PegawaiModel;
+use WP_Pembinaan\Models\HonorerModel;
 use WP_Pembinaan\Services\Utils;
 
 class DashboardController {
-    private $notifikasi_model;
+    private $notifikasi_m;   
+    private $pegawai_m;
+    private $honorer_m;
     private $utils;
 
     public function __construct() {
-        $this->notifikasi_model = new NotifikasiModel();
+        $this->notifikasi_m = new NotifikasiModel();
+        $this->pegawai_m = new PegawaiModel();
+        $this->honorer_m = new HonorerModel();
         $this->utils = new Utils();
         // Daftarkan tindakan untuk menangani template dan query var
         add_action('template_redirect', array($this, 'index'));
@@ -22,10 +28,14 @@ class DashboardController {
     
     // Fungsi untuk menangani tampilan halaman dashboard
     public function index() {
-        $grouped_notifications = $this->notifikasi_model->grouping_timeline();
-    
+        $grouped_notifications = $this->notifikasi_m->grouping_timeline();
+        $c_pegawai = $this->pegawai_m->get_count();
+        $c_tata_usaha = $this->pegawai_m->get_count_sel_by_status_fungsional('Tata Usaha');
+        $c_jaksa = $this->pegawai_m->get_count_sel_by_status_fungsional('Jaksa');
+        $c_honorer = $this->honorer_m->get_count();
         // Include the view file and pass the grouped data to it
         if (get_query_var('dashboard_page')) {
+            
             include plugin_dir_path(__FILE__) . '../Views/dashboard-view.php';
         }
     }

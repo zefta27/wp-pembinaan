@@ -85,11 +85,11 @@ $utils = new Utils();
             <div style="display:flex;flex-direction:row;gap:10px;">
                 <div class="glass">
                         <h5>ASN/ CPNS</h5>
-                        38 Pegawai
+                        <?= $c_pegawai ?> Pegawai
                 </div>
                 <div class="glass">
                         <h5>PTT</h5>
-                        15 Pegawai
+                        <?= $c_honorer ?> Pegawai
                 </div>
             </div>
            
@@ -106,10 +106,12 @@ $utils = new Utils();
             new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: ['Jaksa', 'Tata Usaha'],
+                    labels: [
+                      'Jaksa', 'Tata Usaha'
+                    ],
                     datasets: [{
                         label: '# of Votes',
-                        data: [12, 24],
+                        data: [ <?= $c_jaksa ?>, <?= $c_tata_usaha ?>],
                         backgroundColor: ['#4BC0C0', '#FF9F40'],
                         borderWidth: 0 // Menghilangkan border
                     }]
