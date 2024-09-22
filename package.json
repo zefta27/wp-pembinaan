@@ -1,0 +1,12 @@
+
+{
+  "name": "my-wordpress-plugin",
+  "version": "1.0.0",
+  "scripts": {
+    "sass": "sass --watch assets/sass/style.scss:assets/css/style.css assets/sass/admin.scss:assets/css/admin.css"
+  },
+  "devDependencies": {
+    "sass": "^1.79.3"
+  }
+}
+

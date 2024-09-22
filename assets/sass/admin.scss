@@ -37,3 +37,11 @@
     background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
 
 }
+
+.btn-custom {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    background-color: yellow !important;
+    color: green !important;
+}

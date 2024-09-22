@@ -178,7 +178,7 @@ $gol_pangkat_tu = [
                     <td><?php echo $employee->status_fungsional; ?></td> 
                     <td><?php echo $employee->kgb; ?></td>
                     <td style="display:flex;flex-direction:column;gap:6px;">
-                        <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_pegawai&id=' . $employee->id.'&nip='.$employee->nip)); ?>" class="button delete-button btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');">
+                        <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_pegawai&id=' . $employee->id.'&nip='.$employee->nip)); ?>" class="button delete-button btn btn-danger btn-custom" onclick="return confirm('Are you sure you want to delete this employee?');">
                             <span class="dashicons dashicons-trash"></span> Hapus
                         </a>
                     </td>
