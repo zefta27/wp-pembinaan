@@ -90,7 +90,7 @@ class NotifikasiModel {
             "SELECT tanggal, tipe, nama, deskripsi
              FROM {$this->table_name}
              WHERE tanggal >= %s
-             ORDER BY tanggal ASC, tipe",
+             ORDER BY tanggal ASC, tipe limit 3",
             date('Y-m-d') // Today's date
         );
         

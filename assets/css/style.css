@@ -67,7 +67,7 @@
   --weekdays-border-bottom-color: #404040;
   --calendar-date-hover-color: #505050;
   --calendar-current-date-color: #1b1f21;
-  --calendar-today-color: linear-gradient(to bottom, #03a9f4, #2196f3);
+  --calendar-today-color: #1FA066;
   --calendar-today-innerborder-color: transparent;
   --calendar-nextprev-bg-color: transparent;
   --next-prev-arrow-color: #FFF;
@@ -218,9 +218,9 @@
 }
 
 .timeline {
-  flex-grow: 3 !important;
   position: relative;
   max-width: 900px;
+  width: 45%;
   margin: 20px auto;
   padding-left: 40px; /* Increased padding */
 }

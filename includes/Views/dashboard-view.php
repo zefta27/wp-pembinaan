@@ -85,11 +85,15 @@ $utils = new Utils();
             <div style="display:flex;flex-direction:row;gap:10px;">
                 <div class="glass">
                         <h5>ASN/ CPNS</h5>
-                        <?= $c_pegawai ?> Pegawai
+                        <span>
+                            <?= $c_pegawai ?> Pegawai
+                        </span>
                 </div>
                 <div class="glass">
                         <h5>PTT</h5>
-                        <?= $c_honorer ?> Pegawai
+                        <span>
+                          <?= $c_honorer ?> Pegawai
+                        </span>
                 </div>
             </div>
            
@@ -112,7 +116,7 @@ $utils = new Utils();
                     datasets: [{
                         label: '# of Votes',
                         data: [ <?= $c_jaksa ?>, <?= $c_tata_usaha ?>],
-                        backgroundColor: ['#4BC0C0', '#FF9F40'],
+                        backgroundColor: ['#3FB67C', '#FF9F40'],
                         borderWidth: 0 // Menghilangkan border
                     }]
                 },

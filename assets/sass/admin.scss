@@ -39,9 +39,9 @@
 }
 
 .btn-custom {
-    display: flex;
+    display: flex !important;
     flex-direction: row;
     gap: 10px;
-    background-color: yellow !important;
-    color: green !important;
+    align-items: center;
+    justify-content: center;
 }
