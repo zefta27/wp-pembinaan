@@ -1,3 +1,9 @@
+/* === Variables === */
+$orange: #FF8036;
+$green: #019166;
+$hover-bg: lighten($orange, 40%); // Adjust percentage as needed
+
+/* === Callout Styling === */
 .callout {
     border: 1px solid #0073aa;
     border-radius: 8px;
@@ -5,43 +11,96 @@
     display: flex;
     align-items: center;
     margin-bottom: 12px;
-    padding: 20px;
+    padding: 25px 20px; /* Unified padding */
     position: relative; /* Required for absolute positioning of the icon */
-    padding-top: 25px;
-    padding-bottom: 25px;
+    gap: 10px;
 }
 
-/* Large Icon Styling */
+/* === Large Icon Styling === */
 .fa-large-icon {
-    font-size: 80px;         /* Adjust the size as needed */
-    color: #fff;          /* Adjust the color */
-    opacity: 0.9;            /* Low opacity */
-    position: absolute;      /* Positioning the icon */
-    right: 20px;             /* Position on the right side */
-    top: 50%;                /* Center vertically */
+    font-size: 80px;             /* Adjust size as needed */
+    color: #fff;                 /* Adjust color */
+    opacity: 0.9;                /* Low opacity */
+    position: absolute;          /* Positioning the icon */
+    right: 20px;                 /* Position on the right side */
+    top: 50%;                    /* Center vertically */
     transform: translateY(-50%); /* Adjust for vertical centering */
-    pointer-events: none;    /* Prevent interaction with the icon */
+    pointer-events: none;        /* Prevent interaction with the icon */
 }
-.outline-orange{
-    background-color: white !important;
-    border: 1px solid #FF8036 !important;
-    color: #FF8036 !important;
+
+/* === Button Styling === */
+.outline-orange {
+    background-color: white;
+    border: 1px solid $orange !important;
+    color: $orange !important;
+
+    
 }
-.bg-orange{
-    background-color: #FF8036 !important;
+.outline-orange:hover {
+    background-color: $hover-bg !important;
+}
+
+.outline-green {
+    background-color: white;
+    border: 1px solid $green !important;
+    color: $green !important;
+
+    &:hover {
+        background-color: lighten($green, 90%) !important;
+    }
+}
+
+.bg-orange {
+    background-color: $orange !important;
     border: none !important;
 }
-.bg-orange-light{
-    // border: 1px solid #ffc09b ;
-    border: none  !important;
-    background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
 
+.bg-orange-light {
+    border: none !important;
+    background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
 }
 
+.bg-blue-light {
+    border: 1px solid rgba(34, 112, 177, 0.3) !important;
+    background: rgba(34, 112, 177, 0.08) !important;
+}
+
+/* === Button Custom Styling === */
 .btn-custom {
     display: flex !important;
     flex-direction: row;
     gap: 10px;
     align-items: center;
     justify-content: center;
+}
+
+/* === Tab Styling === */
+.nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+.nav-tab {
+    border: none;
+    background: none;
+}
+
+.nav-tab-active {
+    font-weight: 600;
+    color: #0073aa !important;
+    border-bottom: 2px solid #0073aa !important;
+    background: none !important;
+}
+
+/* === Tab Content === */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* === Table Styling === */
+.wp-list-table {
+    margin-top: 20px;
 }

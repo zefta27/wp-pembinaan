@@ -43,13 +43,17 @@ $gol_pangkat_tu = [
 
 <!-- Tab 1: Daftar Pegawai -->
 <div id="tab-pegawai" class="tab-content active" style="padding-top:20px;">
-    <div class="callout bg-orange-light">
-        <button type="button" class="btn btn-primary outline-orange" data-toggle="modal" data-target="#tambahPegawaiModal">
-            <i class="fa fa-plus"></i>&nbsp; Tambah Pegawai
+    <div class="callout bg-blue-light">
+        <button type="button" class="btn outline-orange" data-toggle="modal" data-target="#tambahPegawaiModal">
+            Tambah Pegawai
+        </button>
+        <button type="button" class="btn outline-green" data-toggle="modal" data-target="#tambahCsvModal">
+            Upload File Pegawai (Via CSV)
         </button>
         <i class="fa fa-plus fa-large-icon"></i> <!-- Large Icon -->
     </div>
-    <!-- Modal -->
+    
+    <!-- Modal Tambah Pegawai-->
     <div class="modal fade" id="tambahPegawaiModal" tabindex="-1" aria-labelledby="tambahPegawaiModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -152,6 +156,112 @@ $gol_pangkat_tu = [
             </div>
         </div>
     </div>
+    <!-- End Modal Tambah Pegawai -->
+
+    <!-- Modal Edit Pegawai -->
+    <div class="modal fade" id="editPegawaiModal" tabindex="-1" aria-labelledby="editPegawaiModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPegawaiModalLabel">Edit Pegawai</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formEditPegawai" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" enctype="multipart/form-data">
+                    <?php wp_nonce_field('pegawai_edit_action', 'pegawai_nonce'); ?>
+                    <input type="hidden" name="action" value="edit_pegawai">
+                    <input type="hidden" id="edit-id" name="id"> <!-- Hidden field untuk ID -->
+
+                    <div class="modal-body">
+                        <!-- Form input yang akan diisi otomatis -->
+                        <div class="form-group">
+                            <label for="edit-nama">Nama</label>
+                            <input type="text" class="form-control" id="edit-nama" name="nama" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-jabatan">Jabatan</label>
+                            <input type="text" class="form-control" id="edit-jabatan" name="jabatan" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-golongan">Golongan/Pangkat</label>
+                            <input type="text" class="form-control" id="edit-golongan" name="gol_pangkat" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-nip">NIP</label>
+                            <input type="text" class="form-control" id="edit-nip" name="nip" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-nrp">NRP</label>
+                            <input type="text" class="form-control" id="edit-nrp" name="nrp" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-no_hp">No HP</label>
+                            <input type="text" class="form-control" id="edit-no_hp" name="no_hp" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-status_fungsional">Status Fungsional</label>
+                            <select class="form-control" id="edit-status_fungsional" name="status_fungsional" required>
+                                <option value="Jaksa">Jaksa</option>
+                                <option value="Tata Usaha">Tata Usaha</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-kgb">KGB (Kenaikan Gaji Berkala)</label>
+                            <input type="date" class="form-control" id="edit-kgb" name="kgb" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <input type="submit" class="btn btn-primary" value="Simpan">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Edit Pegawai-->
+
+
+     <!-- Modal Tambah CSV-->
+    <div class="modal fade" id="tambahCsvModal" tabindex="-1" aria-labelledby="tambahCsvModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tambahCsvModalLabel">Tambah Pegawai Baru (Upload CSV File)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formTambahCsv" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" enctype="multipart/form-data">
+                    <?php wp_nonce_field('csv_upload_action', 'csv_nonce'); ?>
+                    <input type="hidden" name="action" value="upload_csv_pegawai">
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="csv_file">Upload CSV File</label>
+                            <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".x;s" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <input type="submit" class="btn btn-primary" value="Upload">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal Tambah CSV -->
+
+
     <table id="pegawaiTable" class="wp-list-table widefat fixed striped display">
         <thead>
             <tr>
@@ -178,6 +288,19 @@ $gol_pangkat_tu = [
                     <td><?php echo $employee->status_fungsional; ?></td> 
                     <td><?php echo $employee->kgb; ?></td>
                     <td style="display:flex;flex-direction:column;gap:6px;">
+                            <button type="button" class="button edit-button btn btn-primary btn-custom outline-orange" 
+                                data-id="<?php echo $employee->id; ?>"
+                                data-nama="<?php echo $employee->nama; ?>"
+                                data-jabatan="<?php echo $employee->jabatan; ?>"
+                                data-golongan="<?php echo $employee->gol_pangkat; ?>"
+                                data-nip="<?php echo $employee->nip; ?>"
+                                data-nrp="<?php echo $employee->nrp; ?>"
+                                data-no_hp="<?php echo $employee->no_hp; ?>"
+                                data-status_fungsional="<?php echo $employee->status_fungsional; ?>"
+                                data-kgb="<?php echo $employee->kgb; ?>"
+                                data-toggle="modal" data-target="#editPegawaiModal">
+                            <span class="dashicons dashicons-edit"></span> Edit
+                        </button>
                         <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_pegawai&id=' . $employee->id.'&nip='.$employee->nip)); ?>" class="button delete-button btn btn-danger btn-custom" onclick="return confirm('Are you sure you want to delete this employee?');">
                             <span class="dashicons dashicons-trash"></span> Hapus
                         </a>
@@ -186,6 +309,7 @@ $gol_pangkat_tu = [
             <?php endforeach; ?>
         </tbody>
     </table>
+
 </div>
 
 <!-- Tab 2: Pegawai Tidak Tetap (PTT) -->
@@ -275,7 +399,7 @@ $gol_pangkat_tu = [
                 <td><?php echo $honorer->alamat; ?></td>
                 <td><?php echo $honorer->agama; ?></td>
                 <td>
-                    <a href="#" class="button edit-button btn">
+                    <a href="#" class="button edit-button-ptt btn">
                         <span class="dashicons dashicons-edit"></span> Edit
                     </a>
                     <a href="#" class="button delete-button btn btn-danger">
@@ -312,73 +436,11 @@ jQuery(document).ready(function($) {
     });
 });
 </script>
-
-<style>
-/* Styling for tabs */
-.nav-tab-wrapper {
-    margin-bottom: 20px;
-}
-
-
-.nav-tab-active {
-    background: #0073aa;
-    color: #fff;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* Adjust table styling */
-.wp-list-table {
-    margin-top: 20px;
-}
-</style>
-
-
     
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Edit Pegawai</h2>
-        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-            <input type="hidden" name="action" value="edit_pegawai">
-            <input type="hidden" name="id" id="edit_id">
-            <table class="form-table">
-                <tr><th><label for="edit_nama">Nama</label></th><td><input type="text" name="nama" id="edit_nama" required></td></tr>
-                <tr><th><label for="edit_jabatan">Jabatan</label></th><td><input type="text" name="jabatan" id="edit_jabatan" required></td></tr>
-                <tr>
-                    <th><label for="edit_gol_pangkat">Golongan/Pangkat</label></th>
-                    <td>
-                        <select name="gol_pangkat" id="edit_gol_pangkat" required>
-                            <!-- Options will be dynamically populated by JavaScript -->
-                        </select>
-                    </td>
-                </tr>
-                <tr><th><label for="edit_nip">NIP</label></th><td><input type="text" name="nip" id="edit_nip" required></td></tr>
-                <tr><th><label for="edit_nrp">NRP</label></th><td><input type="text" name="nrp" id="edit_nrp" required></td></tr>
-                <tr><th><label for="edit_no_hp">No HP</label></th><td><input type="text" name="no_hp" id="edit_no_hp" required></td></tr>
-                <tr>
-                    <th><label for="edit_status_fungsional">Status Fungsional</label></th>
-                    <td>
-                        <select name="status_fungsional" id="edit_status_fungsional" required>
-                            <option value="Jaksa">Jaksa</option>
-                            <option value="Tata Usaha">Tata Usaha</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" class="button button-primary" value="Edit Pegawai">
-        </form>
-    </div>
-</div>
+
 <script type="text/javascript">
     document.getElementById('status_fungsional').addEventListener('change', function() {
         populateGolPangkat('status_fungsional', 'gol_pangkat');
@@ -407,16 +469,7 @@ jQuery(document).ready(function($) {
 </script>
 
 <script type="text/javascript">
-    document.getElementById('wp-pembinaan-add-pegawai-button').addEventListener('click', function() {
-        document.getElementById('wp-pembinaan-add-pegawai-form').style.display = 'block';
-        document.getElementById('wp-pembinaan-import-csv-form').style.display = 'none';
-    });
-
-    document.getElementById('wp-pembinaan-import-csv-button').addEventListener('click', function() {
-        document.getElementById('wp-pembinaan-import-csv-form').style.display = 'block';
-        document.getElementById('wp-pembinaan-add-pegawai-form').style.display = 'none';
-    });
-
+  
     function populateGolPangkat(statusFungsionalElementId, golPangkatElementId) {
         var statusFungsional = document.getElementById(statusFungsionalElementId).value;
         var golPangkatSelect = document.getElementById(golPangkatElementId);
@@ -439,49 +492,37 @@ jQuery(document).ready(function($) {
         populateGolPangkat('status_fungsional', 'gol_pangkat');
     });
 
-    document.querySelectorAll('.edit-button').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-
-            var employee = {
-                id: this.getAttribute('data-id'),
-                nama: this.getAttribute('data-nama'),
-                jabatan: this.getAttribute('data-jabatan'),
-                gol_pangkat: this.getAttribute('data-gol_pangkat'),
-                nip: this.getAttribute('data-nip'),
-                nrp: this.getAttribute('data-nrp'),
-                no_hp: this.getAttribute('data-no_hp'),
-                status_fungsional: this.getAttribute('data-status_fungsional')
-            };
-
-            document.getElementById('edit_id').value = employee.id;
-            document.getElementById('edit_nama').value = employee.nama;
-            document.getElementById('edit_jabatan').value = employee.jabatan;
-            document.getElementById('edit_nip').value = employee.nip;
-            document.getElementById('edit_nrp').value = employee.nrp;
-            document.getElementById('edit_no_hp').value = employee.no_hp;
-            document.getElementById('edit_status_fungsional').value = employee.status_fungsional;
-
-            populateGolPangkat('edit_status_fungsional', 'edit_gol_pangkat');
-            document.getElementById('edit_gol_pangkat').value = employee.gol_pangkat;
-
-            document.getElementById('editModal').style.display = 'block';
-        });
-    });
-
-    document.querySelector('.close').addEventListener('click', function() {
-        document.getElementById('editModal').style.display = 'none';
-    });
-
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('editModal')) {
-            document.getElementById('editModal').style.display = 'none';
-        }
-    };
-
+    
+  
     // Trigger change event to populate gol_pangkat on page load
     document.getElementById('status_fungsional').dispatchEvent(new Event('change'));
     document.getElementById('edit_status_fungsional').addEventListener('change', function() {
         populateGolPangkat('edit_status_fungsional', 'edit_gol_pangkat');
     });
+
+    // Fungsi untuk menangani tombol Edit
+    $(document).on('click', '.edit-button', function() {
+        // Ambil data dari atribut tombol yang diklik
+        var id = $(this).data('id');
+        var nama = $(this).data('nama');
+        var jabatan = $(this).data('jabatan');
+        var golongan = $(this).data('golongan');
+        var nip = $(this).data('nip');
+        var nrp = $(this).data('nrp');
+        var noHp = $(this).data('no_hp');
+        var statusFungsional = $(this).data('status_fungsional');
+        var kgb = $(this).data('kgb');
+
+        // Set data tersebut ke dalam input di dalam modal
+        $('#editPegawaiModal #edit-id').val(id); // Hidden input untuk ID
+        $('#editPegawaiModal #edit-nama').val(nama);
+        $('#editPegawaiModal #edit-jabatan').val(jabatan);
+        $('#editPegawaiModal #edit-golongan').val(golongan);
+        $('#editPegawaiModal #edit-nip').val(nip);
+        $('#editPegawaiModal #edit-nrp').val(nrp);
+        $('#editPegawaiModal #edit-no_hp').val(noHp);
+        $('#editPegawaiModal #edit-status_fungsional').val(statusFungsional);
+        $('#editPegawaiModal #edit-kgb').val(kgb);
+    });
+
 </script>

@@ -1,3 +1,5 @@
+/* === Variables === */
+/* === Callout Styling === */
 .callout {
   border: 1px solid #0073aa;
   border-radius: 8px;
@@ -5,16 +7,15 @@
   display: flex;
   align-items: center;
   margin-bottom: 12px;
-  padding: 20px;
+  padding: 25px 20px; /* Unified padding */
   position: relative; /* Required for absolute positioning of the icon */
-  padding-top: 25px;
-  padding-bottom: 25px;
+  gap: 10px;
 }
 
-/* Large Icon Styling */
+/* === Large Icon Styling === */
 .fa-large-icon {
-  font-size: 80px; /* Adjust the size as needed */
-  color: #fff; /* Adjust the color */
+  font-size: 80px; /* Adjust size as needed */
+  color: #fff; /* Adjust color */
   opacity: 0.9; /* Low opacity */
   position: absolute; /* Positioning the icon */
   right: 20px; /* Position on the right side */
@@ -23,10 +24,24 @@
   pointer-events: none; /* Prevent interaction with the icon */
 }
 
+/* === Button Styling === */
 .outline-orange {
-  background-color: white !important;
+  background-color: white;
   border: 1px solid #FF8036 !important;
   color: #FF8036 !important;
+}
+
+.outline-orange:hover {
+  background-color: white !important;
+}
+
+.outline-green {
+  background-color: white;
+  border: 1px solid #019166 !important;
+  color: #019166 !important;
+}
+.outline-green:hover {
+  background-color: white !important;
 }
 
 .bg-orange {
@@ -39,12 +54,49 @@
   background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
 }
 
+.bg-blue-light {
+  border: 1px solid rgba(34, 112, 177, 0.3) !important;
+  background: rgba(34, 112, 177, 0.08) !important;
+}
+
+/* === Button Custom Styling === */
 .btn-custom {
   display: flex !important;
   flex-direction: row;
   gap: 10px;
   align-items: center;
   justify-content: center;
+}
+
+/* === Tab Styling === */
+.nav-tab-wrapper {
+  margin-bottom: 20px;
+}
+
+.nav-tab {
+  border: none;
+  background: none;
+}
+
+.nav-tab-active {
+  font-weight: 600;
+  color: #0073aa !important;
+  border-bottom: 2px solid #0073aa !important;
+  background: none !important;
+}
+
+/* === Tab Content === */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* === Table Styling === */
+.wp-list-table {
+  margin-top: 20px;
 }
 
 /*# sourceMappingURL=admin.css.map */

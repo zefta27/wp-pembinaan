@@ -3,5 +3,8 @@
         "psr-4": {
             "WP_Pembinaan\\": "includes/"
         }
+    },
+    "require": {
+        "phpoffice/phpspreadsheet": "^3.3"
     }
 }

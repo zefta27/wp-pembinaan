@@ -9,6 +9,8 @@ use WP_Pembinaan\Models\HonorerModel;
 use WP_Pembinaan\Controllers\NotifikasiController;
 use WP_Pembinaan\Services\Utils;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class PegawaiController {
     private $pegawai_model;
     private $notifikasi_controller;
@@ -23,6 +25,7 @@ class PegawaiController {
         $this->honorer_m = new HonorerModel();
         $this->utils = new Utils();
         add_action('admin_post_add_pegawai', array($this, 'add_pegawai'));
+        add_action('admin_post_upload_csv_pegawai', array($this, 'upload_csv_pegawai'));
         add_action('admin_post_edit_pegawai', array($this, 'edit_pegawai'));
         add_action('admin_post_delete_pegawai', array($this, 'delete_pegawai'));
     }
@@ -34,7 +37,74 @@ class PegawaiController {
     public function get_model() {
         return $this->pegawai_model;
     }
+  
 
+    public function upload_csv_pegawai(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Assuming the uploaded Excel file is being handled as $_FILES['csv_file']
+            $file_tmp = $_FILES['csv_file']['tmp_name'];
+            
+            // Load the Excel file
+            $spreadsheet = IOFactory::load($file_tmp);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+    
+            
+            foreach ($rows as $index => $row) {
+                // Skip header row (usually the first row)
+                if ($index === 0) {
+                    continue;
+                }
+    
+                // Check if all fields in the row are empty
+                if (empty($row[0]) && empty($row[1]) && empty($row[2]) && empty($row[3]) && empty($row[4]) && empty($row[5])) {
+                    continue; // Skip this row
+                }
+    
+                // Split the nip_nrp field into nip and nrp
+                $nip_nrp = isset($row[4]) ? explode('/', $row[4]) : [];
+                $nip = isset($nip_nrp[0]) ? trim($nip_nrp[0]) : null;
+                $nrp = isset($nip_nrp[1]) ? trim($nip_nrp[1]) : null;
+    
+                // Determine the status_fungsional based on the presence of "Jaksa" in gol_pangkat
+                $gol_pangkat = $row[3];
+                $status_fungsional = (strpos($gol_pangkat, 'Jaksa') !== false) ? 'Jaksa' : 'Tata Usaha';
+
+                $tanggal_lahir = $this->utils->nipToTanggalLahir($nip);
+
+    
+                $pegawai = [
+                    'nama' => $row[1],
+                    'jabatan' => $row[2],
+                    'gol_pangkat' => $gol_pangkat,
+                    'nip' => $nip,
+                    'nrp' => $nrp,
+                    'eselon' => $row[5],
+                    'status_fungsional' => $status_fungsional,
+                    'tanggal_lahir' => $tanggal_lahir
+                ];
+                $tanggal_masuk = $this->utils->nipToTanggalMasuk($nip);
+            
+                $this->notifikasi_controller->add_ultah_from_nip($pegawai['nama'], $nip);
+                // $this->notifikasi_controller->add_kgb_from_pegawai($pegawai);
+                $this->notifikasi_controller->add_satyalencana_from_pegawai($pegawai, $tanggal_masuk);
+                
+                $this->pegawai_model->insert($pegawai); // Mengembalikan ID dari pegawai baru
+            
+                // $pegawai_data[] = $pegawai;
+            }
+    
+            wp_redirect(admin_url('admin.php?page=pegawai'));
+            exit;
+            
+        }
+    }
+    
+
+    
+
+    
+    
     public function add_pegawai() {
        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

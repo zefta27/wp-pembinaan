@@ -15,8 +15,10 @@ class Assets {
             wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js', array('jquery'), null, true);
 
             // Enqueue DataTables CSS & JS
-            wp_enqueue_style('datatable-css', 'https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
-            wp_enqueue_script('jquery');
+            wp_enqueue_style('datatable', 'https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css');
+            wp_enqueue_style('datatable-css-bootstrap', 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css');
+            wp_enqueue_style('datatable-css', 'https://cdn.datatables.net/2.1.7/css/dataTables.bootstrap4.css');
+            wp_enqueue_script('jquery','https://code.jquery.com/jquery-3.6.0.min.js');
             wp_enqueue_script('datatable-js', 'https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js', array('jquery'), null, true);
             
             // Enqueue Font Awesome
