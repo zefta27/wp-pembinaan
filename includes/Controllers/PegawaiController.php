@@ -84,12 +84,13 @@ class PegawaiController {
                     'tanggal_lahir' => $tanggal_lahir
                 ];
                 $tanggal_masuk = $this->utils->nipToTanggalMasuk($nip);
-            
-                $this->notifikasi_controller->add_ultah_from_nip($pegawai['nama'], $nip);
-                // $this->notifikasi_controller->add_kgb_from_pegawai($pegawai);
-                $this->notifikasi_controller->add_satyalencana_from_pegawai($pegawai, $tanggal_masuk);
+                if (!$this->is_nip_exist($nip)) {
+                    $this->notifikasi_controller->add_ultah_from_nip($pegawai['nama'], $nip);
+                    $this->notifikasi_controller->add_satyalencana_from_pegawai($pegawai, $tanggal_masuk);
+                    $this->pegawai_model->insert($pegawai); // Mengembalikan ID dari pegawai baru
+                }
                 
-                $this->pegawai_model->insert($pegawai); // Mengembalikan ID dari pegawai baru
+         
             
                 // $pegawai_data[] = $pegawai;
             }
@@ -98,12 +99,7 @@ class PegawaiController {
             exit;
             
         }
-    }
-    
-
-    
-
-    
+    }  
     
     public function add_pegawai() {
        
@@ -149,14 +145,46 @@ class PegawaiController {
             $data['tanggal_lahir'] = $this->utils->nipToTanggalLahir($nip);
             $tanggal_masuk = $this->utils->nipToTanggalMasuk($nip);
             
-            // Tambahkan Notfikasi Ultah    
-            $this->notifikasi_controller->add_ultah_from_nip($data['nama'], $nip);
-            $this->notifikasi_controller->add_kgb_from_pegawai($data);
-            $this->notifikasi_controller->add_satyalencana_from_pegawai($data, $tanggal_masuk);
-            $this->pegawai_model->insert($data); // Mengembalikan ID dari pegawai baru
-            
+            if (!$this->is_nip_exist($nip)) {
+                $this->notifikasi_controller->add_ultah_from_nip($data['nama'], $nip);
+                $this->notifikasi_controller->add_kgb_from_pegawai($data);
+                $this->notifikasi_controller->add_satyalencana_from_pegawai($data, $tanggal_masuk);
+                $this->pegawai_model->insert($data); // Mengembalikan ID dari pegawai baru
+                    
+            }
+          
             wp_redirect(admin_url('admin.php?page=pegawai'));
             exit;
+        }
+    }
+
+    public function edit_pegawai()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+         
+
+            // Ambil data dari form
+            $data = [
+                'nama' => sanitize_text_field($_POST['nama']),
+                'jabatan' => sanitize_text_field($_POST['jabatan']),
+                'gol_pangkat' => sanitize_text_field($_POST['gol_pangkat']),
+                // 'eselon' => sanitize_text_field($_POST['eselon']),
+                // 'bidang' => sanitize_text_field($_POST['bidang']),
+                'nip' => sanitize_text_field($_POST['nip']),
+                'nrp' => sanitize_text_field($_POST['nrp']),
+                'no_hp' => sanitize_text_field($_POST['no_hp']),
+                'kgb' => sanitize_text_field($_POST['kgb']),
+                // 'agama' => sanitize_text_field($_POST['agama']),
+                'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
+                'status_fungsional' => sanitize_text_field($_POST['status_fungsional'])
+            ];
+
+            $this->notifikasi_model->delete_by_chain($data['nip']);
+            print_r($data);
+            exit();
+
+
         }
     }
 
@@ -172,11 +200,17 @@ class PegawaiController {
         exit;
     }
 
+    public function is_nip_exist($nip)
+    {
+        return $this->pegawai_model->get_by_nip($nip) > 0;
+    }
+
     public function display_page() {
         $employees = $this->pegawai_model->get_all();
         $honorers = $this->honorer_m->get_all();
         include_once WP_PEMBINAAN_PLUGIN_DIR . 'includes/Views/pegawai-view.php';
     }
+
     
  
 

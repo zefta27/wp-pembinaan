@@ -68,7 +68,13 @@ class PegawaiModel {
         global $wpdb;
         return $wpdb->get_var("SELECT COUNT(*) FROM $this->table_name");
     }
-
+    public function get_by_nip($nip)
+    {
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT COUNT(*) FROM $this->table_name WHERE nip = %s", $nip);
+        return $wpdb->get_var($query);
+    }
+    
     public function get_count_by_status_fungsional()
     {
         global $wpdb;

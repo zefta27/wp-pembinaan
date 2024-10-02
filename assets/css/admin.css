@@ -25,36 +25,56 @@
 }
 
 /* === Button Styling === */
-.outline-orange {
+.outline__orange {
   background-color: white;
   border: 1px solid #FF8036 !important;
   color: #FF8036 !important;
 }
-
-.outline-orange:hover {
+.outline__orange:hover {
   background-color: white !important;
 }
-
-.outline-green {
+.outline__red {
+  background-color: white !important;
+  border: 1px solid #FF6B6B !important;
+  color: #FF6B6B !important;
+}
+.outline__red:hover {
+  background-color: white !important;
+}
+.outline__green {
   background-color: white;
   border: 1px solid #019166 !important;
   color: #019166 !important;
 }
-.outline-green:hover {
+.outline__green:hover {
   background-color: white !important;
 }
-
-.bg-orange {
-  background-color: #FF8036 !important;
-  border: none !important;
+.outline__green--callout {
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  background-color: #e9f5f2;
+}
+.outline__green--callout:hover {
+  background-color: #e9f5f2 !important;
 }
 
-.bg-orange-light {
+.bg {
   border: none !important;
+}
+.bg__orange {
+  background-color: #FF8036 !important;
+}
+.bg__orange--light {
   background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
 }
-
-.bg-blue-light {
+.bg__green {
+  background-color: #019166 !important;
+}
+.bg__blue {
+  background-color: #0073aa !important;
+}
+.bg__blue--light {
   border: 1px solid rgba(34, 112, 177, 0.3) !important;
   background: rgba(34, 112, 177, 0.08) !important;
 }
@@ -97,6 +117,39 @@
 /* === Table Styling === */
 .wp-list-table {
   margin-top: 20px;
+}
+
+.modal-header__orange {
+  font-weight: 500;
+  background: linear-gradient(to bottom, #fff2eb, #ffffff);
+}
+.modal-header__green {
+  font-weight: 500;
+  background: linear-gradient(to bottom, #e6f4f0, #ffffff);
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+.modal-title__orange {
+  color: #FF8036;
+}
+.modal-title__green {
+  color: #019166;
+}
+
+.modal-content__orange {
+  border: 1px solid #FF8036;
+}
+.modal-content__green {
+  border: 1px solid #019166;
+}
+
+.form-control {
+  max-width: 100% !important;
 }
 
 /*# sourceMappingURL=admin.css.map */

@@ -1,6 +1,10 @@
 /* === Variables === */
 $orange: #FF8036;
+$light-orange : #fff2eb;
 $green: #019166;
+$light-green : #e6f4f0;
+$red: #FF6B6B;
+$blue : #0073aa;
 $hover-bg: lighten($orange, 40%); // Adjust percentage as needed
 
 /* === Callout Styling === */
@@ -29,40 +33,74 @@ $hover-bg: lighten($orange, 40%); // Adjust percentage as needed
 }
 
 /* === Button Styling === */
-.outline-orange {
-    background-color: white;
-    border: 1px solid $orange !important;
-    color: $orange !important;
 
+.outline{
+    &__orange{
+        background-color: white;
+        border: 1px solid $orange !important;
+        color: $orange !important;
     
-}
-.outline-orange:hover {
-    background-color: $hover-bg !important;
-}
-
-.outline-green {
-    background-color: white;
-    border: 1px solid $green !important;
-    color: $green !important;
-
-    &:hover {
-        background-color: lighten($green, 90%) !important;
+        &:hover {
+            background-color: $hover-bg !important;
+        }
     }
+    &__red{
+        background-color: lighten($red, 50%) !important;
+        border: 1px solid $red !important;
+        color: $red !important;
+    
+        &:hover {
+            background-color: lighten($red, 40%) !important; // Membuat latar belakang lebih terang saat hover
+        }
+    }
+    &__green{
+        background-color: white;
+        border: 1px solid $green !important;
+        color: $green !important;
+    
+        &:hover {
+            background-color: lighten($green, 90%) !important;
+        }
+
+        &--callout{
+            border-radius : 4px;
+            padding: 8px 16px;
+            margin-bottom: 8px;
+            background-color: lighten($light-green, 0.9);
+            &:hover {
+                background-color: lighten($light-green, 0.9) !important;
+                
+            }
+        }
+    }
+
 }
 
-.bg-orange {
-    background-color: $orange !important;
+.bg{
     border: none !important;
-}
+   
+    &__orange{
+        background-color: $orange !important;
+       
+        &--light{
+            background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
+      
+        }
+    }
+    
 
-.bg-orange-light {
-    border: none !important;
-    background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
-}
+    &__green{
+        background-color: $green !important;
+    }
 
-.bg-blue-light {
-    border: 1px solid rgba(34, 112, 177, 0.3) !important;
-    background: rgba(34, 112, 177, 0.08) !important;
+    &__blue{
+        background-color: $blue !important;
+        &--light{
+            border: 1px solid rgba(34, 112, 177, 0.3) !important;
+            background: rgba(34, 112, 177, 0.08) !important;
+        }
+    }
+    
 }
 
 /* === Button Custom Styling === */
@@ -103,4 +141,46 @@ $hover-bg: lighten($orange, 40%); // Adjust percentage as needed
 /* === Table Styling === */
 .wp-list-table {
     margin-top: 20px;
+}
+
+// MODAL
+.modal-header{
+    &__orange{
+        font-weight: 500;
+        background: linear-gradient(to bottom, $light-orange, #ffffff ); // Atur tingkat lighten
+  
+    }
+    &__green{
+        font-weight: 500;
+        background: linear-gradient(to bottom, $light-green, #ffffff ); // Atur tingkat lighte
+    }
+}
+.modal-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+
+    &__orange {
+        color: $orange;
+    }
+
+    &__green{
+        color : $green;
+    }
+}
+
+.modal-content{
+    &__orange{
+        border : 1px solid $orange;
+ 
+    }
+    &__green{
+        border : 1px solid $green;
+    }
+}
+// end modal
+
+.form-control{
+    max-width: 100% !important;
 }
