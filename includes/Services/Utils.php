@@ -52,6 +52,25 @@ class Utils {
            
         
     }
+
+    public function nipToTanggalUltah($nip)
+    {
+        // Ekstrak bulan dan hari dari NIP
+        $bulan = substr($nip, 4, 2);
+        $hari = substr($nip, 6, 2);
+
+        // Buat tanggal lahir untuk tahun saat ini
+        $tahun_sekarang = date("Y");
+        $tanggal_lahir = $tahun_sekarang . '-' . $bulan . '-' . $hari;
+
+        // Cek apakah tanggal lahir tahun ini sudah lewat atau belum
+        $tanggal_sekarang = date("Y-m-d");
+        if ($tanggal_lahir < $tanggal_sekarang) {
+            // Tambahkan satu tahun jika tanggal ulang tahun sudah lewat
+            $tanggal_lahir = ($tahun_sekarang + 1) . '-' . $bulan . '-' . $hari;
+        }
+        return $tanggal_lahir;
+    }
     public function nipToTanggalMasuk($nip){
         $tahun = substr($nip, 8, 4);
         $bulan = substr($nip, 12, 2);

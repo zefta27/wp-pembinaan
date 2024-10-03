@@ -33,8 +33,31 @@ $gol_pangkat_tu = [
 
 ?>
 
+<?php 
+    if (isset($_GET['edit_success']) && $_GET['edit_success'] == '1') {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><?php _e('Data  berhasil diedit.', 'text-domain'); ?></p>
+        </div>
+        <?php
+    }
+    if (isset($_GET['insert_success']) && $_GET['insert_success'] == '1') {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><?php _e('Data  berhasil ditambahkan.', 'text-domain'); ?></p>
+        </div>
+        <?php
+    }
+    if (isset($_GET['delete_success']) && $_GET['delete_success'] == '1') {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><?php _e('Data  berhasil dihapus.', 'text-domain'); ?></p>
+        </div>
+        <?php
+    }
+?>
 <div class="wrap">
-    
+
 <!-- Nav tabs -->
 <h2 class="nav-tab-wrapper">
     <a href="#tab-pegawai" class="nav-tab nav-tab-active">Pegawai Negeri Sipil</a>
@@ -138,8 +161,17 @@ $gol_pangkat_tu = [
 
                         <div class="form-group">
                             <label for="agama">Agama</label>
-                            <input type="text" class="form-control" id="agama" name="agama" required>
+                            <select name="agama" id="agama" class="form-control" required>
+                                <option value="">Pilih Agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen Protestan">Kristen Protestan</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Khonghucu">Khonghucu</option>
+                            </select>
                         </div>
+
 
                         <div class="form-group">
                             <label for="foto">Foto</label>
@@ -207,6 +239,8 @@ $gol_pangkat_tu = [
                     <?php wp_nonce_field('pegawai_edit_action', 'pegawai_nonce'); ?>
                     <input type="hidden" name="action" value="edit_pegawai">
                     <input type="hidden" id="edit-id" name="id"> <!-- Hidden field untuk ID -->
+                    <input type="hidden" id="edit-nip_lama" name="nip_lama"> <!-- Hidden field untuk ID -->
+                    <input type="hidden" id="edit-kgb_lama" name="kgb_lama"> <!-- Hidden field untuk ID -->
                     
                     <!-- Form input yang akan diisi otomatis -->
                     <div class="modal-body">
@@ -227,7 +261,33 @@ $gol_pangkat_tu = [
                         </div>
                         <div class="form-group">
                             <label for="edit-golongan">Golongan/Pangkat</label>
-                            <input type="text" class="form-control" id="edit-golongan" name="gol_pangkat" required>
+                            <!-- <input type="text" class="form-control" id="edit-golongan" name="gol_pangkat" required> -->
+                            <select class="form-control" id="edit-golongan" name="gol_pangkat" required style="max-width:100% !important;">
+                                <!-- Golongan/Pangkat dynamically populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-eselon">Eselon</label>
+                            <select name="eselon" id="edit-eselon" class="form-control" style="max-width: 100%;">
+                                <option value="Non Eselon">Non Eselon</option>
+                                <option value="I">I</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                                <option value="V">V</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-bidang">Bidang</label>
+                            <select name="bidang" id="edit-bidang" class="form-control" style="max-width: 100%;">
+                                <option value="Non Bidang">Non Bidang</option>
+                                <option value="Pembinaan">Pembinaan</option>
+                                <option value="Intelijen">Intelijen</option>
+                                <option value="Pemulihan Aset & Barang Rampasan">Pemulihan Aset & Barang Rampasan</option>
+                                <option value="Perdata dan Tata Usaha">Perdata dan Tata Usaha</option>
+                                <option value="Tindak Pidana Umum">Tindak Pidana Umum</option>
+                                <option value="Tindak Pidana Khusus">Tindak Pidana Khusus</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="edit-nip">NIP</label>
@@ -245,6 +305,19 @@ $gol_pangkat_tu = [
                             <label for="edit-kgb">KGB (Kenaikan Gaji Berkala)</label>
                             <input type="date" class="form-control" id="edit-kgb" name="kgb" required>
                         </div>
+                        <div class="form-group">
+                            <label for="edit-agama">Agama</label>
+                            <select name="agama" id="edit-agama" class="form-control" required>
+                                <option value="">Pilih Agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen Protestan">Kristen Protestan</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Khonghucu">Khonghucu</option>
+                            </select>
+                        </div>
+
                     </div>
 
                     <div class="modal-footer">
@@ -283,21 +356,24 @@ $gol_pangkat_tu = [
                     <td><?php echo $employee->no_hp; ?></td>
                     <td><?php echo $employee->status_fungsional; ?></td> 
                     <td><?php echo $employee->kgb; ?></td>
-                    <td style="display:flex;flex-direction:column;gap:6px;">
-                    <button type="button" class="button btn btn-primary btn-custom outline__orange" 
-                        onclick="fillEditModal(
-                            '<?php echo $employee->id; ?>',
-                            '<?php echo addslashes($employee->nama); ?>',
-                            '<?php echo addslashes($employee->jabatan); ?>',
-                            '<?php echo addslashes($employee->gol_pangkat); ?>',
-                            '<?php echo addslashes($employee->nip); ?>',
-                            '<?php echo addslashes($employee->nrp); ?>',
-                            '<?php echo addslashes($employee->no_hp); ?>',
-                            '<?php echo addslashes($employee->status_fungsional); ?>',
-                            '<?php echo addslashes($employee->kgb); ?>'
-                        )" data-toggle="modal" data-target="#editPegawaiModal">
-                        <span class="dashicons dashicons-edit"></span> Edit
-                    </button>
+                    <td class="btn-area-table">
+                        <button type="button" class="button btn btn-primary btn-custom outline__orange" 
+                            onclick="fillEditModal(
+                                '<?php echo $employee->id; ?>',
+                                '<?php echo addslashes($employee->nama); ?>',
+                                '<?php echo addslashes($employee->jabatan); ?>',
+                                '<?php echo addslashes($employee->gol_pangkat); ?>',
+                                '<?php echo addslashes($employee->nip); ?>',
+                                '<?php echo addslashes($employee->nrp); ?>',
+                                '<?php echo addslashes($employee->no_hp); ?>',
+                                '<?php echo addslashes($employee->status_fungsional); ?>',
+                                '<?php echo addslashes($employee->kgb); ?>',
+                                '<?php echo addslashes($employee->bidang); ?>',
+                                '<?php echo addslashes($employee->agama); ?>',
+                                '<?php echo addslashes($employee->eselon); ?>'
+                            )" data-toggle="modal" data-target="#editPegawaiModal">
+                            <span class="dashicons dashicons-edit"></span> Edit
+                        </button>
 
                         <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_pegawai&id=' . $employee->id.'&nip='.$employee->nip)); ?>" class="button delete-button btn btn-danger outline__red" onclick="return confirm('Are you sure you want to delete this employee?');">
                             <span class="dashicons dashicons-trash"></span> Hapus
@@ -307,7 +383,9 @@ $gol_pangkat_tu = [
             <?php endforeach; ?>
         </tbody>
     </table>
-
+    <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_all_pegawai')); ?>" class="button delete-button btn btn-danger outline__red" onclick="return confirm('Are you sure you want to delete this employee?');">
+                <span class="dashicons dashicons-trash"></span> Hapus Semua Pegawai
+            </a>
 </div>
 
 <!-- Tab 2: Pegawai Tidak Tetap (PTT) -->
@@ -321,12 +399,15 @@ $gol_pangkat_tu = [
     </div>
   
 
-    <!-- Modal -->
+    <!-- Tambah Modal -->
     <div class="modal fade" id="tambahHonorerModal" tabindex="-1" aria-labelledby="tambahHonorerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="tambahPegawaiModalLabel">Tambah Pegawai Honorer</h5>
+            <div class="modal-content modal-content__orange">
+                <div class="modal-header modal-header__orange">
+                    <h5 class="modal-title modal-title__orange" id="tambahPegawaiModalLabel">
+                        <span class="dashicons dashicons-plus"></span>&nbsp
+                        Tambah Pegawai Honorer
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -357,7 +438,15 @@ $gol_pangkat_tu = [
                         </div>
                         <div class="form-group">
                             <label for="agama">Agama</label>
-                            <input type="text" class="form-control" id="agama" name="agama" required>
+                            <select name="agama" id="agama" class="form-control" required>
+                                <option value="">Pilih Agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen Protestan">Kristen Protestan</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Khonghucu">Khonghucu</option>
+                            </select>   
                         </div>
                         <div class="form-group">
                             <label for="alamat">Alamat</label>
@@ -367,12 +456,79 @@ $gol_pangkat_tu = [
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                        <input type="submit" class="btn btn-primary" value="Simpan">
+                        <input type="submit" class="btn btn-primary bg__orange" value="Simpan">
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <!-- End Tambah modal -->
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editHonorerModal" tabindex="-1" aria-labelledby="editHonorerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-content__orange">
+                <div class="modal-header modal-header__orange">
+                    <h5 class="modal-title modal-title__orange" id="editHonorerModalLabel">
+                        <span class="dashicons dashicons-edit"></span>&nbsp
+                        Edit Pegawai Honorer
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formEditHonorer" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST" >
+                    <?php wp_nonce_field('honorer_edit_action', 'honorer_edit_nonce'); ?>
+                    <input type="hidden" name="action" value="edit_honorer">
+                    <input type="hidden" id="edit-honorer-id" name="id">
+                    <div class="modal-body">
+                        <!-- Form untuk mengedit pegawai honorer -->
+                        <div class="form-group">
+                            <label for="edit-honorer-nama">Nama</label>
+                            <input type="text" class="form-control" id="edit-honorer-nama" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-honorer-jabatan">Jabatan</label>
+                            <input type="text" class="form-control" id="edit-honorer-jabatan" name="jabatan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-honorer-tanggal_lahir">Tanggal Lahir</label>
+                            <input type="date" class="form-control" id="edit-honorer-tanggal_lahir" name="tanggal_lahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-honorer-jenis_kelamin">Jenis Kelamin</label>
+                            <select class="form-control" id="edit-jenis_kelamin" name="jenis_kelamin" required>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-honorer-agama">Agama</label>
+                            <select name="agama" id="edit-honorer-agama" class="form-control" required>
+                                <option value="">Pilih Agama</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Kristen Protestan">Kristen Protestan</option>
+                                <option value="Katolik">Katolik</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Buddha">Buddha</option>
+                                <option value="Khonghucu">Khonghucu</option>
+                            </select>   
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-honorer-alamat">Alamat</label>
+                            <textarea class="form-control" id="edit-honorer-alamat" name="alamat" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <input type="submit" class="btn btn-primary bg__orange" value="Simpan">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- end edit modal -->
 
 
     <table id="pttTable" class="wp-list-table widefat fixed striped display">
@@ -396,17 +552,28 @@ $gol_pangkat_tu = [
                 <td><?php echo $honorer->jenis_kelamin; ?></td>
                 <td><?php echo $honorer->alamat; ?></td>
                 <td><?php echo $honorer->agama; ?></td>
-                <td>
-                    <a href="#" class="button edit-button-ptt btn">
+                <td class="btn-area-table">
+                    <button type="button" class="button btn btn-primary btn-custom outline__orange" 
+                        onclick="fillEditHonorerModal(
+                            '<?php echo $honorer->id; ?>',
+                            '<?php echo addslashes($honorer->nama); ?>',
+                            '<?php echo addslashes($honorer->jabatan); ?>',
+                            '<?php echo addslashes($honorer->tanggal_lahir); ?>',
+                            '<?php echo addslashes($honorer->jenis_kelamin); ?>',
+                            '<?php echo addslashes($honorer->alamat); ?>',
+                            '<?php echo addslashes($honorer->agama); ?>',
+                        )" data-toggle="modal" data-target="#editHonorerModal">
                         <span class="dashicons dashicons-edit"></span> Edit
-                    </a>
-                    <a href="#" class="button delete-button btn btn-danger">
+                    </button>
+
+                    <a href="<?php echo esc_url(admin_url('admin-post.php?action=delete_honorer&id=' . $honorer->id)); ?>" class="button delete-button btn btn-danger outline__red" onclick="return confirm('Are you sure you want to delete this honorer?');">
                         <span class="dashicons dashicons-trash"></span> Hapus
                     </a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
+
 </table>
 
 </div>
@@ -469,21 +636,40 @@ jQuery(document).ready(function($) {
   
     // Trigger change event to populate gol_pangkat on page load
     document.getElementById('status_fungsional').dispatchEvent(new Event('change'));
-    document.getElementById('edit_status_fungsional').addEventListener('change', function() {
-        populateGolPangkat('edit_status_fungsional', 'edit_gol_pangkat');
+    document.getElementById('edit-status_fungsional').addEventListener('change', function() {
+        populateGolPangkat('edit-status_fungsional', 'edit-golongan');
     });
 
-    function fillEditModal(id, nama, jabatan, golongan, nip, nrp, noHp, statusFungsional, kgb) {
+    function fillEditModal(id, nama, jabatan, golongan, nip, nrp, noHp, statusFungsional, kgb, bidang, agama, eselon) {
         // Set data ke dalam input di modal
         document.getElementById('edit-id').value = id;
         document.getElementById('edit-nama').value = nama;
         document.getElementById('edit-jabatan').value = jabatan;
-        document.getElementById('edit-golongan').value = golongan;
         document.getElementById('edit-nip').value = nip;
+        document.getElementById('edit-nip_lama').value = nip;
         document.getElementById('edit-nrp').value = nrp;
         document.getElementById('edit-no_hp').value = noHp;
-        document.getElementById('edit-status_fungsional').value = statusFungsional;
         document.getElementById('edit-kgb').value = kgb;
+        document.getElementById('edit-kgb_lama').value = kgb;
+        document.getElementById('edit-bidang').value = bidang;
+        document.getElementById('edit-agama').value = agama;
+        document.getElementById('edit-eselon').value = eselon;
+        document.getElementById('edit-status_fungsional').value = statusFungsional;
+        // document.getElementById('edit-status_fungsional').dispatchEvent(new Event('change'));
+        populateGolPangkat('edit-status_fungsional', 'edit-golongan');
+        document.getElementById('edit-golongan').value = golongan;
+        
+    }
+
+    function fillEditHonorerModal(id, nama, jabatan, tanggal_lahir, jenis_kelamin, alamat, agama) {
+    // Set data ke dalam input di modal edit
+        document.getElementById('edit-honorer-id').value = id;
+        document.getElementById('edit-honorer-nama').value = nama;
+        document.getElementById('edit-honorer-jabatan').value = jabatan;
+        document.getElementById('edit-honorer-tanggal_lahir').value = tanggal_lahir;
+        document.getElementById('edit-honorer-jenis_kelamin').value = jenis_kelamin;
+        document.getElementById('edit-honorer-alamat').value = alamat;
+        document.getElementById('edit-honorer-agama').value = agama;
     }
 
 

@@ -43,6 +43,7 @@ $utils = new Utils();
   }
   h1, h3 {
       margin: 0;
+      color : white;
   }
   canvas{
       color:white !important;
@@ -57,27 +58,31 @@ $utils = new Utils();
     <div class="container">
         <!-- Timeline container -->
         <div class="timeline">
-            <?php 
-               $today = date('d - m - Y'); // Format today's date to match the date format in your data
-              foreach ($grouped_notifications as $date => $types): ?>
-                <div class="timeline-item">
-                    <span class="timeline-date"><?php echo $date; ?></span>
-                    <div class="timeline-content <?php echo ($date === $today) ? 'pulse' : ''; ?>">
-                      <?php foreach ($types as $type => $details): ?>
-                              <span class="timeline-jenis"><?php echo str_replace('-', ' ', ucfirst($type)); ?></span>
-                              <ul>
-                                  <?php foreach ($details as $detail): ?>
-                                      <li>
-                                          <span style="font-weight:600"><?= $detail['nama'] ?></span><br>
-                                          <?= $detail['deskripsi'] ?>
-                                      </li>
-                                  <?php endforeach; ?>
-                              </ul>
-                      <?php endforeach; ?>
-                    </div>
+        <?php 
+          $today = date('d - m - Y'); // Format today's date to match the date format in your data
+          $counter = 0; // Inisialisasi penghitung
+          foreach ($grouped_notifications as $date => $types): 
+              if ($counter >= 3) break; // Batasi hanya 3 iterasi
+              $counter++; // Tambah penghitung di setiap iterasi
+          ?>
+              <div class="timeline-item">
+                  <span class="timeline-date"><?php echo $date; ?></span>
+                  <div class="timeline-content <?php echo ($date === $today) ? 'pulse' : ''; ?>">
+                    <?php foreach ($types as $type => $details): ?>
+                            <span class="timeline-jenis"><?php echo str_replace('-', ' ', ucfirst($type)); ?></span>
+                            <ul>
+                                <?php foreach ($details as $detail): ?>
+                                    <li>
+                                        <span style="font-weight:600"><?= $detail['nama'] ?></span><br>
+                                        <?= $detail['deskripsi'] ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                    <?php endforeach; ?>
+                  </div>
+              </div>
+          <?php endforeach; ?>
 
-                </div>
-            <?php endforeach; ?>
         </div>
 
         <div class="calendar-container">

@@ -57,7 +57,11 @@ class PegawaiModel {
         global $wpdb;
         $wpdb->delete($this->table_name, ['id' => $id]);
     }
-
+    public function delete_all() {
+        global $wpdb;
+        $wpdb->query("TRUNCATE TABLE {$this->table_name}");
+    }
+    
     public function get_all() {
         global $wpdb;
         return $wpdb->get_results("SELECT * FROM $this->table_name");

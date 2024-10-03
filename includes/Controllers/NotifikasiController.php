@@ -85,32 +85,36 @@ class NotifikasiController {
     }
     public function add_ultah_from_nip($nama, $nip)
     {   
-        // Ekstrak bulan dan hari dari NIP
-        $bulan = substr($nip, 4, 2);
-        $hari = substr($nip, 6, 2);
-
-        // Buat tanggal lahir untuk tahun saat ini
-        $tahun_sekarang = date("Y");
-        $tanggal_lahir = $tahun_sekarang . '-' . $bulan . '-' . $hari;
-
-        // Cek apakah tanggal lahir tahun ini sudah lewat atau belum
-        $tanggal_sekarang = date("Y-m-d");
-        if ($tanggal_lahir < $tanggal_sekarang) {
-            // Tambahkan satu tahun jika tanggal ulang tahun sudah lewat
-            $tanggal_lahir = ($tahun_sekarang + 1) . '-' . $bulan . '-' . $hari;
-        }
-
+        $tanggal_ultah = $this->utils->nipToTanggalUltah($nip);
         // Persiapkan data untuk disimpan
         $data = [
             'nama' => 'Ulang Tahun ' . $nama,
-            'deskripsi' => 'Selamat ulang tahun ' . $nama . ' yang lahir pada tanggal ' . $tanggal_lahir,
+            'deskripsi' => 'Selamat ulang tahun ' . $nama . ' yang lahir pada tanggal ' . $tanggal_ultah,
             'tipe' => 'ulang tahun',
-            'tanggal' => $tanggal_lahir,
+            'tanggal' => $tanggal_ultah,
             'chain' => $nip
         ];
 
         // Simpan data ke model
         $this->notifikasi_m->add($data);
+    }
+    public function upd_ultah_from_nip($nama, $nip)
+    {   
+        $tanggal_ultah = $this->utils->nipToTanggalUltah($nip);
+        // Persiapkan data untuk disimpan
+        $data = [
+            'nama' => 'Ulang Tahun ' . $nama,
+            'deskripsi' => 'Selamat ulang tahun ' . $nama . ' yang lahir pada tanggal ' . $tanggal_ultah,
+            // 'tipe' => 'ulang tahun',
+            'tanggal' => $tanggal_ultah,
+            
+        ];
+        // Simpan data ke model
+        $where = [
+            'chain' => $nip,
+            'tipe' => 'ulang tahun'
+        ];
+        $this->notifikasi_m->update_by_chain($where, $data);
     }
     public function add_kgb_from_pegawai($data){
         $data_notif = [
@@ -126,25 +130,30 @@ class NotifikasiController {
         $status_fungsional = $data['status_fungsional'];
         $batas_pensiun = ($status_fungsional == 'Tata Usaha') ? UMUR_PENSIUN_TU : UMUR_PENSIUN_JAKSA;
         $umur = $this->utils->convertToUmur($data['tanggal_lahir'], $tanggal_masuk);
-        $tanggal_satya_lencana = date('Y-m-d', strtotime($tanggal_masuk . ' +10 years'));
+        $tanggal_satya_lencana = date('Y-m-d', strtotime($tanggal_masuk . ' +10 years')); // Mulai dari 10 tahun setelah tanggal masuk
         $satya_lencana = 'X';
-        while($umur<$batas_pensiun){
-            if($tanggal_satya_lencana>date('Y-m-d')){
-
+        
+        while($umur < $batas_pensiun){
+            if($tanggal_satya_lencana > date('Y-m-d')){
+    
                 $data_notif = [
                     'nama' => 'Satya Lencana '.$satya_lencana.' '.$data['nama'],
-                    'deskripsi' => 'Penghargaan Satya Lencana ke-'.$satya_lencana.' a.n. :'.$data['nama'].', pada tanggal :'.$tanggal_satya_lencana,
+                    'deskripsi' => 'Penghargaan Satya Lencana ke-'.$satya_lencana.' a.n. :'.$data['nama'].', pada tanggal :'.$tanggal_satya_lencana.' di umur ke - '.$umur,
                     'tipe' => 'Satya Lencana',
                     'tanggal'=> $tanggal_satya_lencana,
                     'chain' => $data['nip']
                 ];          
                 $this->notifikasi_m->add($data_notif);
             }
-            $umur = $umur + 10;
-            $satya_lencana = $satya_lencana.'X';
-            $tanggal_satya_lencana = date('Y-m-d', strtotime($tanggal_satya_lencana . ' +10 years'));
+    
+            // Tambah umur dan tahun sesuai logika yang benar
+            $umur += 10;
+            $satya_lencana .= 'X';
+            $tanggal_satya_lencana = date('Y-m-d', strtotime($tanggal_satya_lencana . ' +10 years')); // Tambahkan 10 tahun lagi untuk periode berikutnya
         }
-    } 
+    }
+    
+    
     public function initialize() {
         add_rewrite_rule(
             '^cek_renewal/?$',  // URL yang diakses oleh user

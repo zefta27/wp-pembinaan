@@ -81,10 +81,13 @@ $hover-bg: lighten($orange, 40%); // Adjust percentage as needed
    
     &__orange{
         background-color: $orange !important;
+        border : 1px solid $orange;
+
        
         &--light{
-            background: linear-gradient(to bottom, #ffe6d7, #fff2eb) !important;
-      
+            background: rgb(255, 230, 215, 0.4) !important;
+            border : 1px solid rgb(255, 128, 54, 0.5);
+        
         }
     }
     
@@ -111,15 +114,31 @@ $hover-bg: lighten($orange, 40%); // Adjust percentage as needed
     align-items: center;
     justify-content: center;
 }
+.btn-area-table{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
 
 /* === Tab Styling === */
 .nav-tab-wrapper {
     margin-bottom: 20px;
+
+    &a:hover{
+        text-decoration: none !important;
+    }
 }
 
 .nav-tab {
     border: none;
     background: none;
+
+    &:focus{
+        box-shadow: none !important;
+    }
+    &a:hover{
+        text-decoration: none !important;
+    }
 }
 
 .nav-tab-active {
@@ -127,6 +146,10 @@ $hover-bg: lighten($orange, 40%); // Adjust percentage as needed
     color: #0073aa !important;
     border-bottom: 2px solid #0073aa !important;
     background: none !important;
+
+    &:focus{
+        box-shadow: none !important;
+    }
 }
 
 /* === Tab Content === */

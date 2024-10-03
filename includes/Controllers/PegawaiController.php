@@ -28,6 +28,7 @@ class PegawaiController {
         add_action('admin_post_upload_csv_pegawai', array($this, 'upload_csv_pegawai'));
         add_action('admin_post_edit_pegawai', array($this, 'edit_pegawai'));
         add_action('admin_post_delete_pegawai', array($this, 'delete_pegawai'));
+        add_action('admin_post_delete_all_pegawai', array($this, 'delete_all_pegawai'));
     }
 
     public function activate() {
@@ -71,15 +72,16 @@ class PegawaiController {
                 $status_fungsional = (strpos($gol_pangkat, 'Jaksa') !== false) ? 'Jaksa' : 'Tata Usaha';
 
                 $tanggal_lahir = $this->utils->nipToTanggalLahir($nip);
-
-    
+                $eselon = $row[5];
+                $eselon = !empty($eselon) ? $eselon : 'Non Eselon';
+                
                 $pegawai = [
                     'nama' => $row[1],
                     'jabatan' => $row[2],
                     'gol_pangkat' => $gol_pangkat,
                     'nip' => $nip,
                     'nrp' => $nrp,
-                    'eselon' => $row[5],
+                    'eselon' => $eselon,
                     'status_fungsional' => $status_fungsional,
                     'tanggal_lahir' => $tanggal_lahir
                 ];
@@ -153,7 +155,7 @@ class PegawaiController {
                     
             }
           
-            wp_redirect(admin_url('admin.php?page=pegawai'));
+            wp_redirect(admin_url('admin.php?page=pegawai&insert_success=1'));
             exit;
         }
     }
@@ -163,27 +165,41 @@ class PegawaiController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
          
-
+            $id = sanitize_text_field($_POST['id']);
+            $nip_lama = sanitize_text_field($_POST['nip_lama']);
+            $kgb_lama = sanitize_text_field($_POST['kgb_lama']);
             // Ambil data dari form
             $data = [
                 'nama' => sanitize_text_field($_POST['nama']),
                 'jabatan' => sanitize_text_field($_POST['jabatan']),
                 'gol_pangkat' => sanitize_text_field($_POST['gol_pangkat']),
-                // 'eselon' => sanitize_text_field($_POST['eselon']),
-                // 'bidang' => sanitize_text_field($_POST['bidang']),
+                'eselon' => sanitize_text_field($_POST['eselon']),
+                'bidang' => sanitize_text_field($_POST['bidang']),
                 'nip' => sanitize_text_field($_POST['nip']),
                 'nrp' => sanitize_text_field($_POST['nrp']),
                 'no_hp' => sanitize_text_field($_POST['no_hp']),
                 'kgb' => sanitize_text_field($_POST['kgb']),
-                // 'agama' => sanitize_text_field($_POST['agama']),
+                'agama' => sanitize_text_field($_POST['agama']),
                 'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
                 'status_fungsional' => sanitize_text_field($_POST['status_fungsional'])
             ];
 
-            $this->notifikasi_model->delete_by_chain($data['nip']);
-            print_r($data);
-            exit();
+            $this->pegawai_model->update($id, $data);
+            if($nip_lama!=$data['nip']){
+                $nip = $data['nip'];
+                $data['tanggal_lahir'] = $this->utils->nipToTanggalLahir($nip);
+                $tanggal_masuk = $this->utils->nipToTanggalMasuk($nip);
 
+                $this->notifikasi_controller->upd_ultah_from_nip($data['nama'], $nip);
+                $this->notifikasi_model->delete_by_tipe_chain('Satya Lencana', $nip);
+                $this->notifikasi_controller->add_satyalencana_from_pegawai($data, $tanggal_masuk);
+            }
+            if($kgb_lama!=$data['kgb']){
+                $this->notifikasi_model->delete_by_tipe_chain('kgb', $data['nip']);
+                $this->notifikasi_controller->add_kgb_from_pegawai($data);
+            }
+            wp_redirect(admin_url('admin.php?page=pegawai&edit_success=1'));
+            exit;
 
         }
     }
@@ -196,10 +212,16 @@ class PegawaiController {
             $this->pegawai_model->delete($id);
             $this->notifikasi_model->delete_by_chain($nip);
         }   
-        wp_redirect(admin_url('admin.php?page=pegawai'));
+        wp_redirect(admin_url('admin.php?page=pegawai&delete_success=1'));
         exit;
     }
-
+    public function delete_all_pegawai()
+    {
+        $this->pegawai_model->delete_all();
+        $this->notifikasi_model->delete_all_chain();
+        wp_redirect(admin_url('admin.php?page=pegawai&delete_success=1'));
+        exit;
+    }
     public function is_nip_exist($nip)
     {
         return $this->pegawai_model->get_by_nip($nip) > 0;

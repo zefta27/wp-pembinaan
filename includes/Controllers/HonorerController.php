@@ -50,7 +50,7 @@ class HonorerController {
             $this->honorer_m->insert($data);
     
             // Redirect setelah data berhasil ditambahkan
-            wp_redirect(admin_url('admin.php?page=pegawai'));
+            wp_redirect(admin_url('admin.php?page=pegawai&insert_success=1'));
             exit;
         }
     }
@@ -58,20 +58,23 @@ class HonorerController {
 
     public function edit_honorer() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $id = intval($_POST['id']);
-            $data = [
+           // Ambil data dari form dan sanitasi input
+           $id = sanitize_text_field($_POST['id']);
+           
+           $data = [
                 'nama' => sanitize_text_field($_POST['nama']),
                 'jabatan' => sanitize_text_field($_POST['jabatan']),
-                'gol_pangkat' => sanitize_text_field($_POST['gol_pangkat']),
-                'nip' => sanitize_text_field($_POST['nip']),
-                'nrp' => sanitize_text_field($_POST['nrp']),
-                'no_hp' => sanitize_text_field($_POST['no_hp']),
-                'status_fungsional' => sanitize_text_field($_POST['status_fungsional']),
-                'is_pejabat_struktural' => isset($_POST['is_pejabat_struktural']) ? 1 : 0,
+                'tanggal_lahir' => sanitize_text_field($_POST['tanggal_lahir']),
+                'jenis_kelamin' => sanitize_text_field($_POST['jenis_kelamin']),
+                'agama' => sanitize_text_field($_POST['agama']),
+                'alamat' => sanitize_textarea_field($_POST['alamat']),
             ];
+
+            // Masukkan data ke dalam database
             $this->honorer_m->update($id, $data);
 
-            wp_redirect(admin_url('admin.php?page=pegawai'));
+            // Redirect setelah data berhasil ditambahkan
+            wp_redirect(admin_url('admin.php?page=pegawai&edit_success=1'));
             exit;
         }
     }

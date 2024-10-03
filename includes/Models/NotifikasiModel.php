@@ -90,7 +90,7 @@ class NotifikasiModel {
             "SELECT tanggal, tipe, nama, deskripsi
              FROM {$this->table_name}
              WHERE tanggal >= %s
-             ORDER BY tanggal ASC, tipe limit 3",
+             ORDER BY tanggal ASC, tipe limit 10",
             date('Y-m-d') // Today's date
         );
         
@@ -121,13 +121,27 @@ class NotifikasiModel {
         global $wpdb;
         return $wpdb->update($this->table_name, $data, ['id' => $id]);
     }
-
+    public function update_by_chain($where, $data){
+        global $wpdb;
+        return $wpdb->update($this->table_name, $data, $where);
+    }
     // Menghapus notifikasi
     public function delete($id) {
         global $wpdb;
         return $wpdb->delete($this->table_name, ['id' => $id]);
     }
 
+    public function delete_by_tipe_chain($tipe, $chain)
+    {
+        global $wpdb;
+        return $wpdb->delete($this->table_name, ['tipe' => $tipe, 'chain'=> $chain]);
+    }
+    public function delete_all_chain() {
+        global $wpdb;
+        // Menghapus semua baris di mana kolom 'chain' tidak kosong atau tidak null
+        return $wpdb->query("DELETE FROM {$this->table_name} WHERE chain IS NOT NULL AND chain != ''");
+    }
+    
     public function delete_by_chain($chain) {
         global $wpdb;
         return $wpdb->delete($this->table_name, ['chain' => $chain]);
