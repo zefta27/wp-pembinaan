@@ -210,7 +210,7 @@ $gol_pangkat_tu = [
                             <div class="outline__green outline__green--callout">
                                 Untuk penguploadtannya diharapkan menggunakan file 
                             </div>
-                            <input type="file" class="form-control" id="csv_file" name="csv_file" accept=".xlsx" required>
+                            <input type="file" class="form-control" id="csv_file" name="csv_file"  required>
                         </div>
                     </div>
 

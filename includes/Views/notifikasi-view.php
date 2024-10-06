@@ -45,6 +45,7 @@
                                 <option value="Laporan Tahunan">Laporan Tahunan</option>
                                 <option value="Satya Lencana">Satya Lencana</option>
                                 <option value="Pengumuman">Pengumuman</option>
+                                <option value="Zoom Meeting">Zoom Meeting</option>
                                 <option value="Lainnya">Lainnya</option>
                             </select>
                             <input type="text" class="form-control" name="tipe" required>

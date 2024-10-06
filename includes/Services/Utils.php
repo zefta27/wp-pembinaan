@@ -2,27 +2,28 @@
 namespace WP_Pembinaan\Services;
 
 class Utils {
-    function formatTanggal($tanggal) {
-        // Gunakan \DateTime untuk mengakses kelas bawaan PHP
-        $date = \DateTime::createFromFormat('Y-m-d', $tanggal);
-
-        // Pastikan objek DateTime berhasil dibuat
+    function formatTanggal($tanggal, $formatDate = 'Y-m-d') {
+        // Coba buat objek DateTime dari format input
+        $date = \DateTime::createFromFormat($formatDate, $tanggal);
+    
+        // Jika objek DateTime gagal dibuat, cek apakah format lain bisa digunakan
         if (!$date) {
-            return 'Tanggal tidak valid';
+            return 'Tanggal tidak valid'; // Kembalikan pesan error jika gagal
         }
-
-        // Menggunakan IntlDateFormatter untuk format tanggal dalam bahasa Indonesia
+    
+        // Gunakan IntlDateFormatter untuk format tanggal dalam bahasa Indonesia
         $fmt = new \IntlDateFormatter(
             'id_ID', // Locale bahasa Indonesia
             \IntlDateFormatter::LONG, // Format panjang (09 Agustus 2024)
-            \IntlDateFormatter::NONE, // Tidak perlu waktu
+            \IntlDateFormatter::NONE, // Tidak memerlukan waktu
             'Asia/Jakarta', // Zona waktu
             \IntlDateFormatter::GREGORIAN // Kalender Gregorian
         );
-
-        // Format tanggal
+    
+        // Format dan kembalikan hasil
         return $fmt->format($date);
     }
+    
     function kurangkanDuaBulan($tanggalAsli)
     {
         

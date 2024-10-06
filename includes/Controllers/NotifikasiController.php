@@ -89,7 +89,7 @@ class NotifikasiController {
         // Persiapkan data untuk disimpan
         $data = [
             'nama' => 'Ulang Tahun ' . $nama,
-            'deskripsi' => 'Selamat ulang tahun ' . $nama . ' yang lahir pada tanggal ' . $tanggal_ultah,
+            'deskripsi' => '',
             'tipe' => 'ulang tahun',
             'tanggal' => $tanggal_ultah,
             'chain' => $nip

@@ -66,7 +66,7 @@ $utils = new Utils();
               $counter++; // Tambah penghitung di setiap iterasi
           ?>
               <div class="timeline-item">
-                  <span class="timeline-date"><?php echo $date; ?></span>
+                  <span class="timeline-date"><?php echo $utils->formatTanggal($date,'d - m - Y'); ?></span>
                   <div class="timeline-content <?php echo ($date === $today) ? 'pulse' : ''; ?>">
                     <?php foreach ($types as $type => $details): ?>
                             <span class="timeline-jenis"><?php echo str_replace('-', ' ', ucfirst($type)); ?></span>

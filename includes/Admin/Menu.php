@@ -38,8 +38,10 @@ class Menu {
     }
 
     public function display_admin_page() {
-        echo '<div class="wrap"><h1>WP Pembinaan Admin Page</h1></div>';
-    }
+
+        $admin_controller = new \WP_Pembinaan\Controllers\AdminController();
+        $admin_controller->index();
+     }
 
     public function display_pegawai_page() {
         $pegawai_controller = new \WP_Pembinaan\Controllers\PegawaiController();

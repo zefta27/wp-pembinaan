@@ -20,9 +20,25 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use WP_Pembinaan\Main;
 
+// Fungsi untuk menjalankan plugin
 function run_wp_pembinaan() {
     $plugin = new Main();
     $plugin->run();
 }
 
+// Hook untuk aktivasi plugin
+function wp_pembinaan_activate() {
+    Main::activate();
+}
+
+// Hook untuk deaktivasi plugin
+function wp_pembinaan_deactivate() {
+    Main::deactivate();
+}
+
+// Register hooks untuk aktivasi dan deaktivasi
+register_activation_hook(__FILE__, 'wp_pembinaan_activate');
+register_deactivation_hook(__FILE__, 'wp_pembinaan_deactivate');
+
+// Jalankan plugin
 run_wp_pembinaan();
